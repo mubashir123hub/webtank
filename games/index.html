@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games - WEBTANK</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
+
+        /* General Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+            color: #fff;
+            overflow-x: hidden;
+            text-align: center;
+            scroll-behavior: smooth;
+        }
+
+        /* Glowing Mouse Cursor */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -20px;
+            left: -20px;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, rgba(0, 255, 204, 0.8), rgba(0, 123, 255, 0.8));
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            animation: glowCursor 1.5s infinite alternate;
+            z-index: 9999;
+        }
+
+        @keyframes glowCursor {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(1.5);
+                opacity: 0.4;
+            }
+        }
+
+        /* Improved Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #00ffcc, #007bff);
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #007bff, #00ffcc);
+        }
+
+        /* Glowing Text Selection */
+        ::selection {
+            background: linear-gradient(90deg, #00ffcc, #007bff);
+            color: white;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.8);
+        }
+
+        /* Fixed Search Bar */
+        .search-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            background: rgba(30, 30, 47, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-bar {
+            width: 80%;
+            max-width: 600px;
+            padding: 15px;
+            border: 2px solid #00ffcc;
+            border-radius: 30px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .search-bar:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
+        }
+
+        /* Game List */
+        .container {
+            max-width: 1200px;
+            margin: 150px auto 50px;
+            padding: 20px;
+        }
+
+        .game-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .game-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .game-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
+        }
+
+        .game-item h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #00ffcc;
+        }
+
+        .game-item p {
+            font-size: 1rem;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(90deg, #00ffcc, #007bff);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
+        }
+
+        /* Glowing Word Selection */
+        .highlight {
+            background: linear-gradient(90deg, #00ffcc, #007bff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glowText 1.5s infinite alternate;
+        }
+
+        @keyframes glowText {
+            0% {
+                text-shadow: 0 0 10px #00ffcc, 0 0 20px #007bff;
+            }
+
+            100% {
+                text-shadow: 0 0 20px #007bff, 0 0 40px #00ffcc;
+            }
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 50px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px 15px 0 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Fixed Search Bar -->
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search games..." oninput="searchGames()">
+    </div>
+
+    <!-- Game List -->
+    <div class="container">
+        <div class="game-list" id="gameList">
+            <!-- Games will be dynamically added here -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>&copy; 2025 WEBTANK. All rights reserved.</footer>
+
+    <script>
+        // Array of 500+ games (PC, Mobile, Console) with download links
+        const games = [
+            // PC Games
+            { title: "Grand Theft Auto V", description: "An open-world action-adventure game.", platform: "PC", download: "#" },
+            { title: "Minecraft", description: "A sandbox survival game.", platform: "PC", download: "#" },
+            { title: "Call of Duty: Warzone", description: "A battle royale shooter.", platform: "PC", download: "#" },
+            { title: "The Witcher 3: Wild Hunt", description: "An open-world RPG.", platform: "PC", download: "#" },
+            { title: "Cyberpunk 2077", description: "A futuristic open-world RPG.", platform: "PC", download: "#" },
+            { title: "Valorant", description: "A tactical first-person shooter.", platform: "PC", download: "#" },
+            { title: "League of Legends", description: "A competitive MOBA game.", platform: "PC", download: "#" },
+            { title: "Apex Legends", description: "A fast-paced battle royale game.", platform: "PC", download: "#" },
+            { title: "Fortnite", description: "A popular battle royale game.", platform: "PC", download: "#" },
+            { title: "Among Us", description: "A multiplayer social deduction game.", platform: "PC", download: "#" },
+            // Mobile Games
+            { title: "PUBG Mobile", description: "A battle royale game for mobile.", platform: "Mobile", download: "#" },
+            { title: "Genshin Impact", description: "An open-world action RPG.", platform: "Mobile", download: "#" },
+            { title: "Clash Royale", description: "A real-time strategy game.", platform: "Mobile", download: "#" },
+            { title: "Clash of Clans", description: "A strategy game.", platform: "Mobile", download: "#" },
+            { title: "Pokémon GO", description: "An augmented reality game.", platform: "Mobile", download: "#" },
+            { title: "Candy Crush Saga", description: "A puzzle game.", platform: "Mobile", download: "#" },
+            { title: "Subway Surfers", description: "An endless runner game.", platform: "Mobile", download: "#" },
+            { title: "Call of Duty: Mobile", description: "A mobile FPS game.", platform: "Mobile", download: "#" },
+            { title: "Free Fire", description: "A battle royale game.", platform: "Mobile", download: "#" },
+            { title: "Roblox", description: "A sandbox game.", platform: "Mobile", download: "#" },
+            // Console Games
+            { title: "God of War", description: "An action-adventure game.", platform: "Console", download: "#" },
+            { title: "The Last of Us Part II", description: "A post-apocalyptic action game.", platform: "Console", download: "#" },
+            { title: "Spider-Man: Miles Morales", description: "An action-adventure game.", platform: "Console", download: "#" },
+            { title: "Halo Infinite", description: "A sci-fi first-person shooter.", platform: "Console", download: "#" },
+            { title: "Forza Horizon 5", description: "A racing simulation game.", platform: "Console", download: "#" },
+            { title: "Animal Crossing: New Horizons", description: "A life simulation game.", platform: "Console", download: "#" },
+            { title: "Super Mario Odyssey", description: "A platformer adventure game.", platform: "Console", download: "#" },
+            { title: "The Legend of Zelda: Breath of the Wild", description: "An open-world adventure game.", platform: "Console", download: "#" },
+            { title: "Elden Ring", description: "An open-world action RPG.", platform: "Console", download: "#" },
+            { title: "Horizon Forbidden West", description: "An open-world action RPG.", platform: "Console", download: "#" },
+            { title: "Elden Ring", description: "A dark fantasy RPG with vast open-world exploration and challenging combat.", download: "https://store.steampowered.com/app/1245620/ELDEN_RING/" },
+            { title: "The Witcher 3: Wild Hunt", description: "An open-world RPG where you play as Geralt of Rivia, a monster hunter in a vast fantasy world.", download: "https://store.steampowered.com/app/292030/The_Witcher_3_Wild_Hunt/" },
+            { title: "Cyberpunk 2077", description: "An open-world action-adventure set in Night City, a megalopolis obsessed with power and glamour.", download: "https://store.steampowered.com/app/1091500/Cyberpunk_2077/" },
+            { title: "Red Dead Redemption 2", description: "A story-driven open-world game set in the Wild West, following the life of Arthur Morgan.", download: "https://store.steampowered.com/app/1174180/Red_Dead_Redemption_2/" },
+            { title: "Grand Theft Auto V", description: "An open-world action-adventure game set in the fictional city of Los Santos.", download: "https://store.steampowered.com/app/271590/Grand_Theft_Auto_V/" },
+            { title: "Dark Souls III", description: "A challenging action RPG with a dark fantasy setting and intense boss battles.", download: "https://store.steampowered.com/app/374320/DARK_SOULS_III/" },
+            { title: "Sekiro: Shadows Die Twice", description: "An action-adventure game set in a fantastical version of feudal Japan.", download: "https://store.steampowered.com/app/814380/Sekiro_Shadows_Die_Twice/" },
+            { title: "Hollow Knight", description: "A beautifully crafted Metroidvania game with a haunting atmosphere and challenging gameplay.", download: "https://store.steampowered.com/app/367520/Hollow_Knight/" },
+            { title: "Stardew Valley", description: "A farming simulation game where you build and manage your dream farm.", download: "https://store.steampowered.com/app/413150/Stardew_Valley/" },
+            { title: "The Legend of Zelda: Breath of the Wild", description: "An open-world action-adventure game set in the kingdom of Hyrule.", download: "https://www.nintendo.com/store/products/the-legend-of-zelda-breath-of-the-wild-switch/" },
+            { title: "Minecraft", description: "A sandbox game where you can build and explore infinite worlds.", download: "https://www.minecraft.net/" },
+            { title: "Among Us", description: "A multiplayer party game of teamwork and betrayal.", download: "https://store.steampowered.com/app/945360/Among_Us/" },
+            { title: "Valheim", description: "A survival and exploration game set in a procedurally generated Viking world.", download: "https://store.steampowered.com/app/892970/Valheim/" },
+            { title: "Hades", description: "A rogue-like dungeon crawler where you battle out of the Underworld.", download: "https://store.steampowered.com/app/1145360/Hades/" },
+            { title: "Disco Elysium", description: "A narrative-driven RPG where you play as a detective solving a complex case.", download: "https://store.steampowered.com/app/632470/Disco_Elysium/" },
+            { title: "Celeste", description: "A platformer about climbing a mountain and overcoming personal struggles.", download: "https://store.steampowered.com/app/504230/Celeste/" },
+            { title: "Portal 2", description: "A puzzle-platformer game with mind-bending mechanics and a witty story.", download: "https://store.steampowered.com/app/620/Portal_2/" },
+            { title: "Half-Life 2", description: "A first-person shooter with a gripping story and revolutionary gameplay.", download: "https://store.steampowered.com/app/220/HalfLife_2/" },
+            { title: "Doom Eternal", description: "A fast-paced first-person shooter with intense demon-slaying action.", download: "https://store.steampowered.com/app/782330/DOOM_Eternal/" },
+            { title: "Bioshock Infinite", description: "A first-person shooter set in the floating city of Columbia.", download: "https://store.steampowered.com/app/8870/BioShock_Infinite/" },
+            { title: "Mass Effect 2", description: "A sci-fi RPG where you lead a team to save the galaxy.", download: "https://store.steampowered.com/app/24980/Mass_Effect_2/" },
+            { title: "The Elder Scrolls V: Skyrim", description: "An open-world RPG set in the fantasy world of Tamriel.", download: "https://store.steampowered.com/app/489830/The_Elder_Scrolls_V_Skyrim_Special_Edition/" },
+            { title: "Fallout: New Vegas", description: "A post-apocalyptic RPG set in the Mojave Desert.", download: "https://store.steampowered.com/app/22380/Fallout_New_Vegas/" },
+            { title: "Divinity: Original Sin 2", description: "A tactical RPG with deep storytelling and turn-based combat.", download: "https://store.steampowered.com/app/435150/Divinity_Original_Sin_2/" },
+            { title: "The Outer Worlds", description: "A sci-fi RPG where you explore distant planets and shape the story.", download: "https://store.steampowered.com/app/578650/The_Outer_Worlds/" },
+            { title: "Control", description: "A supernatural action-adventure game set in a mysterious government building.", download: "https://store.steampowered.com/app/870780/Control/" },
+            { title: "Death Stranding", description: "A unique open-world game about reconnecting a fractured society.", download: "https://store.steampowered.com/app/1190460/DEATH_STRANDING/" },
+            { title: "Horizon Zero Dawn", description: "An open-world action RPG set in a post-apocalyptic world ruled by machines.", download: "https://store.steampowered.com/app/1151640/Horizon_Zero_Dawn_Complete_Edition/" },
+            { title: "God of War", description: "An action-adventure game following Kratos and his son Atreus on a mythological journey.", download: "https://store.steampowered.com/app/1593500/God_of_War/" },
+            { title: "Spider-Man: Miles Morales", description: "An action-adventure game where you play as Miles Morales, the new Spider-Man.", download: "https://store.playstation.com/en-us/product/UP9000-PPSA01348_00-SMMMORALES000000/" },
+            { title: "Assassin's Creed Valhalla", description: "An open-world action RPG set in the Viking age.", download: "https://store.steampowered.com/app/2208920/Assassins_Creed_Valhalla/" },
+            { title: "Far Cry 6", description: "An open-world first-person shooter set in a fictional Caribbean island.", download: "https://store.steampowered.com/app/2369390/Far_Cry_6/" },
+            { title: "Resident Evil Village", description: "A survival horror game set in a mysterious village.", download: "https://store.steampowered.com/app/1196590/Resident_Evil_Village/" },
+            { title: "Monster Hunter: World", description: "An action RPG where you hunt monsters in a vast open world.", download: "https://store.steampowered.com/app/582010/Monster_Hunter_World/" },
+            { title: "Persona 5 Royal", description: "A JRPG with a unique blend of dungeon crawling and social simulation.", download: "https://store.steampowered.com/app/1687950/Persona_5_Royal/" },
+            { title: "Final Fantasy VII Remake", description: "A reimagining of the classic JRPG with modern graphics and gameplay.", download: "https://store.steampowered.com/app/1462040/FINAL_FANTASY_VII_REMAKE/" },
+            { title: "The Last of Us Part II", description: "A story-driven action-adventure game set in a post-apocalyptic world.", download: "https://store.playstation.com/en-us/product/UP9000-CUSA07820_00-THELASTOFUSPART2/" },
+            { title: "Ghost of Tsushima", description: "An open-world action-adventure game set in feudal Japan.", download: "https://store.playstation.com/en-us/product/UP9000-CUSA11455_00-GHOSTOFFSHIP0000/" },
+            { title: "Demon's Souls", description: "A remake of the classic action RPG with stunning visuals and challenging gameplay.", download: "https://store.playstation.com/en-us/product/UP9000-PPSA01348_00-DEMONSSOULS00000/" },
+            { title: "Bloodborne", description: "A dark action RPG with a gothic horror setting and challenging combat.", download: "https://store.playstation.com/en-us/product/UP9000-CUSA00900_00-BLOODBORNE000000/" },
+            { title: "Nioh 2", description: "An action RPG set in a dark fantasy version of feudal Japan.", download: "https://store.steampowered.com/app/1325200/Nioh_2__The_Complete_Edition/" },
+            { title: "Halo: Infinite", description: "A first-person shooter set in the expansive Halo universe.", download: "https://store.steampowered.com/app/1240440/Halo_Infinite/" },
+            { title: "Forza Horizon 5", description: "An open-world racing game set in a stunning representation of Mexico.", download: "https://store.steampowered.com/app/1551360/Forza_Horizon_5/" },
+            { title: "FIFA 23", description: "The latest installment in the popular football simulation series.", download: "https://store.steampowered.com/app/1811260/EA_SPORTS_FIFA_23/" },
+            { title: "NBA 2K23", description: "A basketball simulation game with realistic gameplay and graphics.", download: "https://store.steampowered.com/app/1919590/NBA_2K23/" },
+            { title: "Call of Duty: Modern Warfare II", description: "A first-person shooter with a gripping campaign and multiplayer modes.", download: "https://store.steampowered.com/app/1938090/Call_of_Duty_Modern_Warfare_II/" },
+            { title: "Battlefield 2042", description: "A first-person shooter set in a near-future world with large-scale battles.", download: "https://store.steampowered.com/app/1517290/Battlefield_2042/" },
+            { title: "Apex Legends", description: "A free-to-play battle royale game with unique characters and fast-paced combat.", download: "https://store.steampowered.com/app/1172470/Apex_Legends/" },
+            { title: "Fortnite", description: "A popular battle royale game with building mechanics and a vibrant art style.", download: "https://store.epicgames.com/en-US/p/fortnite" },
+            { title: "Rocket League", description: "A high-octane hybrid of arcade soccer and vehicular mayhem.", download: "https://store.steampowered.com/app/252950/Rocket_League/" },
+            { title: "Overwatch 2", description: "A team-based first-person shooter with unique heroes and abilities.", download: "https://store.steampowered.com/app/2357570/Overwatch_2/" },
+            { title: "Valorant", description: "A tactical first-person shooter with unique characters and abilities.", download: "https://playvalorant.com/" },
+            { title: "League of Legends", description: "A popular MOBA game with strategic gameplay and a vast roster of champions.", download: "https://www.leagueoflegends.com/" },
+            { title: "Dota 2", description: "A competitive MOBA game with deep strategy and teamwork.", download: "https://store.steampowered.com/app/570/Dota_2/" },
+            { title: "World of Warcraft", description: "A massively multiplayer online RPG set in the Warcraft universe.", download: "https://worldofwarcraft.com/" },
+            { title: "Final Fantasy XIV", description: "A massively multiplayer online RPG with a rich story and world.", download: "https://store.steampowered.com/app/39210/FINAL_FANTASY_XIV_Online/" },
+            { title: "Genshin Impact", description: "An open-world action RPG with gacha mechanics and elemental combat.", download: "https://genshin.hoyoverse.com/" },
+            { title: "Honkai: Star Rail", description: "A turn-based RPG set in a sci-fi universe with stunning visuals.", download: "https://hsr.hoyoverse.com/" },
+            { title: "Terraria", description: "A sandbox adventure game with exploration, crafting, and combat.", download: "https://store.steampowered.com/app/105600/Terraria/" },
+            { title: "Don't Starve", description: "A survival game with a unique art style and challenging gameplay.", download: "https://store.steampowered.com/app/219740/Dont_Starve/" },
+            { title: "Subnautica", description: "An underwater survival game set on an alien planet.", download: "https://store.steampowered.com/app/264710/Subnautica/" },
+            { title: "No Man's Sky", description: "A space exploration game with procedurally generated planets and galaxies.", download: "https://store.steampowered.com/app/275850/No_Mans_Sky/" },
+            { title: "Starbound", description: "A sandbox adventure game set in space with exploration and crafting.", download: "https://store.steampowered.com/app/211820/Starbound/" },
+            { title: "Factorio", description: "A game about building and managing factories on an alien planet.", download: "https://store.steampowered.com/app/427520/Factorio/" },
+            { title: "Satisfactory", description: "A first-person factory-building game set on an alien planet.", download: "https://store.steampowered.com/app/526870/Satisfactory/" },
+            { title: "RimWorld", description: "A colony simulation game with storytelling and survival elements.", download: "https://store.steampowered.com/app/294100/RimWorld/" },
+            { title: "Crusader Kings III", description: "A grand strategy game where you build and manage a medieval dynasty.", download: "https://store.steampowered.com/app/1158310/Crusader_Kings_III/" },
+            { title: "Europa Universalis IV", description: "A grand strategy game where you control a nation through history.", download: "https://store.steampowered.com/app/236850/Europa_Universalis_IV/" },
+            { title: "Cities: Skylines", description: "A city-building simulation game with deep management mechanics.", download: "https://store.steampowered.com/app/255710/Cities_Skylines/" },
+            { title: "The Sims 4", description: "A life simulation game where you create and control virtual people.", download: "https://store.steampowered.com/app/1222670/The_Sims_4/" },
+            { title: "Planet Zoo", description: "A zoo management simulation game with realistic animals and habitats.", download: "https://store.steampowered.com/app/703080/Planet_Zoo/" },
+            { title: "Microsoft Flight Simulator", description: "A realistic flight simulation game with stunning graphics.", download: "https://store.steampowered.com/app/1250410/Microsoft_Flight_Simulator/" },
+            { title: "Kerbal Space Program", description: "A space flight simulation game where you build and launch rockets.", download: "https://store.steampowered.com/app/220200/Kerbal_Space_Program/" },
+            { title: "Frostpunk", description: "A city-building survival game set in a frozen post-apocalyptic world.", download: "https://store.steampowered.com/app/323190/Frostpunk/" },
+            { title: "This War of Mine", description: "A survival game where you control civilians in a war-torn city.", download: "https://store.steampowered.com/app/282070/This_War_of_Mine/" },
+            { title: "Papers, Please", description: "A dystopian document thriller where you play as an immigration officer.", download: "https://store.steampowered.com/app/239030/Papers_Please/" },
+            { title: "Return of the Obra Dinn", description: "A mystery game where you investigate the fate of a ship's crew.", download: "https://store.steampowered.com/app/653530/Return_of_the_Obra_Dinn/" },
+            { title: "Disco Elysium", description: "A narrative-driven RPG where you play as a detective solving a complex case.", download: "https://store.steampowered.com/app/632470/Disco_Elysium/" },
+            { title: "Outer Wilds", description: "An exploration game set in a time-looping solar system.", download: "https://store.steampowered.com/app/753640/Outer_Wilds/" },
+            { title: "The Stanley Parable", description: "A first-person exploration game with a unique narrative.", download: "https://store.steampowered.com/app/221910/The_Stanley_Parable/" },
+            { title: "Undertale", description: "A quirky RPG where your choices affect the story and characters.", download: "https://store.steampowered.com/app/391540/Undertale/" },
+            { title: "Celeste", description: "A platformer about climbing a mountain and overcoming personal struggles.", download: "https://store.steampowered.com/app/504230/Celeste/" },
+            { title: "Hollow Knight", description: "A beautifully crafted Metroidvania game with a haunting atmosphere.", download: "https://store.steampowered.com/app/367520/Hollow_Knight/" },
+            { title: "Ori and the Blind Forest", description: "A visually stunning platformer with emotional storytelling.", download: "https://store.steampowered.com/app/261570/Ori_and_the_Blind_Forest/" },
+            { title: "Cuphead", description: "A run-and-gun platformer with a unique 1930s cartoon art style.", download: "https://store.steampowered.com/app/268910/Cuphead/" },
+            { title: "Dead Cells", description: "A rogue-like Metroidvania with fast-paced combat and procedurally generated levels.", download: "https://store.steampowered.com/app/588650/Dead_Cells/" },
+            { title: "Hades", description: "A rogue-like dungeon crawler where you battle out of the Underworld.", download: "https://store.steampowered.com/app/1145360/Hades/" },
+            { title: "Slay the Spire", description: "A deck-building rogue-like with strategic gameplay.", download: "https://store.steampowered.com/app/646570/Slay_the_Spire/" },
+            { title: "Into the Breach", description: "A turn-based strategy game where you control mechs to save the world.", download: "https://store.steampowered.com/app/590380/Into_the_Breach/" },
+            { title: "FTL: Faster Than Light", description: "A space strategy game where you manage a starship and its crew.", download: "https://store.steampowered.com/app/212680/FTL_Faster_Than_Light/" },
+            { title: "Darkest Dungeon", description: "A challenging RPG about managing a party of heroes in a dark, gothic world.", download: "https://store.steampowered.com/app/262060/Darkest_Dungeon/" },
+            { title: "XCOM 2", description: "A turn-based strategy game where you lead a resistance against an alien occupation.", download: "https://store.steampowered.com/app/268500/XCOM_2/" },
+            { title: "Civilization VI", description: "A turn-based strategy game where you build and lead a civilization.", download: "https://store.steampowered.com/app/289070/Sid_Meiers_Civilization_VI/" },
+            { title: "Total War: Warhammer III", description: "A grand strategy game with real-time battles set in the Warhammer universe.", download: "https://store.steampowered.com/app/1142710/Total_War_WARHAMMER_III/" },
+            { title: "Stellaris", description: "A grand strategy game where you explore and conquer the galaxy.", download: "https://store.steampowered.com/app/281990/Stellaris/" },
+            { title: "Hearts of Iron IV", description: "A grand strategy game set during World War II.", download: "https://store.steampowered.com/app/394360/Hearts_of_Iron_IV/" },
+            { title: "Age of Empires IV", description: "A real-time strategy game where you build and lead a civilization through history.", download: "https://store.steampowered.com/app/1466860/Age_of_Empires_IV/" },
+            { title: "Warcraft III: Reforged", description: "A real-time strategy game set in the Warcraft universe.", download: "https://store.steampowered.com/app/1989970/Warcraft_III_Reforged/" },
+            { title: "StarCraft II", description: "A real-time strategy game set in a sci-fi universe.", download: "https://store.steampowered.com/app/212638/StarCraft_II/" },
+            { title: "Diablo III", description: "An action RPG where you battle demons and collect loot.", download: "https://store.steampowered.com/app/213340/DIABLO_III/" },
+            { title: "Path of Exile", description: "A free-to-play action RPG with deep customization and loot mechanics.", download: "https://store.steampowered.com/app/238960/Path_of_Exile/" },
+            { title: "Grim Dawn", description: "An action RPG set in a dark, apocalyptic world.", download: "https://store.steampowered.com/app/219990/Grim_Dawn/" },
+            { title: "Torchlight II", description: "An action RPG with fast-paced combat and loot-driven gameplay.", download: "https://store.steampowered.com/app/200710/Torchlight_II/" },
+            { title: "Borderlands 3", description: "A looter-shooter with a quirky story and tons of guns.", download: "https://store.steampowered.com/app/397540/Borderlands_3/" },
+            { title: "Destiny 2", description: "A multiplayer first-person shooter with RPG elements.", download: "https://store.steampowered.com/app/1085660/Destiny_2/" },
+            { title: "Warframe", description: "A free-to-play action game where you play as space ninjas.", download: "https://store.steampowered.com/app/230410/Warframe/" },
+            { title: "The Division 2", description: "An online action RPG set in a post-apocalyptic Washington, D.C.", download: "https://store.steampowered.com/app/2221490/Tom_Clancys_The_Division_2/" },
+            { title: "Anthem", description: "An online action RPG with mech suits and fast-paced combat.", download: "https://store.steampowered.com/app/1237970/Anthem/" },
+            { title: "Monster Hunter: Rise", description: "An action RPG where you hunt monsters in a vibrant world.", download: "https://store.steampowered.com/app/1446780/MONSTER_HUNTER_RISE/" },
+            { title: "Nier: Automata", description: "An action RPG with a deep story and unique gameplay mechanics.", download: "https://store.steampowered.com/app/524220/NieRAutomata/" },
+            { title: "Bayonetta", description: "An action game with stylish combat and over-the-top set pieces.", download: "https://store.steampowered.com/app/460790/Bayonetta/" },
+            { title: "Devil May Cry 5", description: "An action game with fast-paced combat and a stylish presentation.", download: "https://store.steampowered.com/app/601150/Devil_May_Cry_5/" },
+            { title: "Metal Gear Solid V: The Phantom Pain", description: "A stealth-action game with open-world gameplay.", download: "https://store.steampowered.com/app/287700/METAL_GEAR_SOLID_V_THE_PHANTOM_PAIN/" },
+            { title: "Hitman 3", description: "A stealth game where you play as Agent 47, a professional assassin.", download: "https://store.steampowered.com/app/1659040/HITMAN_3/" },
+            { title: "Dishonored 2", description: "A stealth-action game with supernatural abilities and multiple playstyles.", download: "https://store.steampowered.com/app/403640/Dishonored_2/" },
+            { title: "Prey", description: "A first-person shooter with immersive sim elements and a sci-fi setting.", download: "https://store.steampowered.com/app/480490/Prey/" },
+            { title: "Deus Ex: Mankind Divided", description: "A cyberpunk RPG with stealth and action gameplay.", download: "https://store.steampowered.com/app/337000/Deus_Ex_Mankind_Divided/" },
+            { title: "The Outer Worlds", description: "A sci-fi RPG where you explore distant planets and shape the story.", download: "https://store.steampowered.com/app/578650/The_Outer_Worlds/" },
+            { title: "Mass Effect Legendary Edition", description: "A remastered collection of the Mass Effect trilogy.", download: "https://store.steampowered.com/app/1328670/Mass_Effect_Legendary_Edition/" },
+            { title: "Dragon Age: Inquisition", description: "An open-world RPG where you lead the Inquisition to save the world.", download: "https://store.steampowered.com/app/1222690/Dragon_Age_Inquisition/" },
+            { title: "The Witcher 3: Wild Hunt", description: "An open-world RPG where you play as Geralt of Rivia, a monster hunter.", download: "https://store.steampowered.com/app/292030/The_Witcher_3_Wild_Hunt/" },
+            { title: "Elden Ring", description: "A dark fantasy RPG with vast open-world exploration and challenging combat.", download: "https://store.steampowered.com/app/1245620/ELDEN_RING/" },
+            { title: "Elden Ring", description: "A dark fantasy RPG with vast open-world exploration and challenging combat.", download: "https://store.steampowered.com/app/1245620/ELDEN_RING/" },
+            { title: "Cyberpunk 2077", description: "A futuristic open-world RPG set in Night City.", download: "https://store.steampowered.com/app/1091500/Cyberpunk_2077/" },
+            { title: "The Witcher 3: Wild Hunt", description: "An open-world RPG with a rich story and immersive world.", download: "https://store.steampowered.com/app/292030/The_Witcher_3_Wild_Hunt/" },
+            { title: "Grand Theft Auto V", description: "An open-world action-adventure game.", download: "https://store.steampowered.com/app/271590/Grand_Theft_Auto_V/" },
+            { title: "Red Dead Redemption 2", description: "A western action-adventure game with a gripping story.", download: "https://store.steampowered.com/app/1174180/Red_Dead_Redemption_2/" },
+            { title: "Valorant", description: "A tactical first-person shooter with unique characters.", download: "https://playvalorant.com/" },
+            { title: "League of Legends", description: "A competitive MOBA game with millions of players.", download: "https://www.leagueoflegends.com/" },
+            { title: "Apex Legends", description: "A fast-paced battle royale game with unique legends.", download: "https://www.ea.com/games/apex-legends" },
+            { title: "Fortnite", description: "A popular battle royale game with building mechanics.", download: "https://www.epicgames.com/fortnite/" },
+            { title: "Among Us", description: "A multiplayer social deduction game.", download: "https://store.steampowered.com/app/945360/Among_Us/" },
+            { title: "Minecraft", description: "A sandbox survival game with endless possibilities.", download: "https://www.minecraft.net/" },
+            { title: "Call of Duty: Warzone", description: "A battle royale shooter with fast-paced action.", download: "https://www.callofduty.com/warzone" },
+            { title: "PUBG: Battlegrounds", description: "A battle royale survival game.", download: "https://store.steampowered.com/app/578080/PUBG_BATTLEGROUNDS/" },
+            { title: "Rocket League", description: "A vehicular soccer game with high-octane action.", download: "https://store.epicgames.com/en-US/p/rocket-league" },
+            { title: "Dota 2", description: "A multiplayer online battle arena game.", download: "https://store.steampowered.com/app/570/Dota_2/" },
+            { title: "Counter-Strike: Global Offensive", description: "A competitive first-person shooter.", download: "https://store.steampowered.com/app/730/CounterStrike_Global_Offensive/" },
+            { title: "Rainbow Six Siege", description: "A tactical shooter with destructible environments.", download: "https://store.steampowered.com/app/359550/Tom_Clancys_Rainbow_Six_Siege/" },
+            { title: "Destiny 2", description: "A multiplayer first-person shooter with RPG elements.", download: "https://store.steampowered.com/app/1085660/Destiny_2/" },
+            { title: "Borderlands 3", description: "A looter-shooter with a humorous story.", download: "https://store.steampowered.com/app/397540/Borderlands_3/" },
+            { title: "Monster Hunter: World", description: "An action RPG with epic monster battles.", download: "https://store.steampowered.com/app/582010/Monster_Hunter_World/" },
+            { title: "Persona 5 Royal", description: "A role-playing game with a stylish story.", download: "https://store.steampowered.com/app/1687950/Persona_5_Royal/" },
+            { title: "Final Fantasy VII Remake", description: "A reimagining of the classic RPG.", download: "https://store.steampowered.com/app/1462040/FINAL_FANTASY_VII_REMAKE/" },
+            { title: "Hades", description: "A roguelike action game with Greek mythology.", download: "https://store.steampowered.com/app/1145360/Hades/" },
+            { title: "Stardew Valley", description: "A farming simulation RPG.", download: "https://store.steampowered.com/app/413150/Stardew_Valley/" },
+            { title: "Terraria", description: "A 2D sandbox adventure game.", download: "https://store.steampowered.com/app/105600/Terraria/" },
+            { title: "Cuphead", description: "A run-and-gun platformer with a unique art style.", download: "https://store.steampowered.com/app/268910/Cuphead/" },
+            { title: "Hollow Knight", description: "A Metroidvania action-adventure game.", download: "https://store.steampowered.com/app/367520/Hollow_Knight/" },
+            { title: "Celeste", description: "A challenging platformer with a heartfelt story.", download: "https://store.steampowered.com/app/504230/Celeste/" },
+            { title: "Undertale", description: "A unique RPG with a memorable story.", download: "https://store.steampowered.com/app/391540/Undertale/" },
+            { title: "Disco Elysium", description: "A narrative-driven RPG with deep dialogue.", download: "https://store.steampowered.com/app/632470/Disco_Elysium/" },
+            { title: "Divinity: Original Sin 2", description: "A critically acclaimed RPG with tactical combat.", download: "https://store.steampowered.com/app/435150/Divinity_Original_Sin_2/" },
+            { title: "Baldur's Gate 3", description: "A next-gen RPG with deep storytelling.", download: "https://store.steampowered.com/app/1086940/Baldurs_Gate_3/" },
+            { title: "XCOM 2", description: "A turn-based strategy game with tactical combat.", download: "https://store.steampowered.com/app/268500/XCOM_2/" },
+            { title: "Civilization VI", description: "A turn-based strategy game about building empires.", download: "https://store.steampowered.com/app/289070/Sid_Meiers_Civilization_VI/" },
+            { title: "Total War: Warhammer III", description: "A strategy game with epic battles.", download: "https://store.steampowered.com/app/1142710/Total_War_WARHAMMER_III/" },
+            { title: "Cities: Skylines", description: "A city-building simulation game.", download: "https://store.steampowered.com/app/255710/Cities_Skylines/" },
+            { title: "The Sims 4", description: "A life simulation game.", download: "https://store.steampowered.com/app/1222670/The_Sims_4/" },
+            { title: "Planet Zoo", description: "A zoo simulation game.", download: "https://store.steampowered.com/app/703080/Planet_Zoo/" },
+            { title: "Microsoft Flight Simulator", description: "A flight simulation game.", download: "https://store.steampowered.com/app/1250410/Microsoft_Flight_Simulator/" },
+            { title: "Euro Truck Simulator 2", description: "A truck simulation game.", download: "https://store.steampowered.com/app/227300/Euro_Truck_Simulator_2/" },
+            { title: "Kerbal Space Program", description: "A space flight simulation game.", download: "https://store.steampowered.com/app/220200/Kerbal_Space_Program/" },
+            { title: "Factorio", description: "A factory-building simulation game.", download: "https://store.steampowered.com/app/427520/Factorio/" },
+            { title: "Rust", description: "A multiplayer survival game.", download: "https://store.steampowered.com/app/252490/Rust/" },
+            { title: "ARK: Survival Evolved", description: "A survival game with dinosaurs.", download: "https://store.steampowered.com/app/346110/ARK_Survival_Evolved/" },
+            { title: "Conan Exiles", description: "A survival game in a barbaric world.", download: "https://store.steampowered.com/app/440900/Conan_Exiles/" },
+            { title: "DayZ", description: "A multiplayer survival game.", download: "https://store.steampowered.com/app/221100/DayZ/" },
+            { title: "The Forest", description: "A survival horror game.", download: "https://store.steampowered.com/app/242760/The_Forest/" },
+            { title: "Green Hell", description: "A survival game in the Amazon rainforest.", download: "https://store.steampowered.com/app/815370/Green_Hell/" },
+            { title: "Satisfactory", description: "A factory-building simulation game.", download: "https://store.steampowered.com/app/526870/Satisfactory/" },
+            { title: "Valheim", description: "A survival and exploration game.", download: "https://store.steampowered.com/app/892970/Valheim/" },
+            { title: "Sea of Thieves", description: "A pirate-themed multiplayer game.", download: "https://store.steampowered.com/app/1172620/Sea_of_Thieves/" },
+            { title: "Monster Hunter Rise", description: "An action RPG with epic monster battles.", download: "https://store.steampowered.com/app/1446780/MONSTER_HUNTER_RISE/" },
+            { title: "Nioh 2", description: "A challenging action RPG.", download: "https://store.steampowered.com/app/1325200/Nioh_2__The_Complete_Edition/" },
+            { title: "Demon's Souls", description: "A challenging action RPG.", download: "https://store.playstation.com/en-us/product/UP9000-CUSA07820_00-DEMONSSOULS00000" },
+            { title: "Bloodborne", description: "A gothic action RPG.", download: "https://store.playstation.com/en-us/product/UP9000-CUSA00900_00-BLOODBORNE000000" },
+            { title: "Shadow of the Colossus", description: "An action-adventure game.", download: "https://store.playstation.com/en-us/product/UP9000-CUSA07820_00-DEMONSSOULS00000" },
+            { title: "The Last Guardian", description: "An action-adventure game.", download: "https://store.playstation.com/en-us/product/UP9000-CUSA03969_00-THELASTGUARDIAN" },
+            { title: "Journey", description: "An indie adventure game.", download: "https://store.steampowered.com/app/638230/Journey/" },
+            { title: "Firewatch", description: "A first-person adventure game.", download: "https://store.steampowered.com/app/383870/Firewatch/" },
+            { title: "What Remains of Edith Finch", description: "A narrative-driven adventure game.", download: "https://store.steampowered.com/app/501300/What_Remains_of_Edith_Finch/" },
+            { title: "Life is Strange", description: "A narrative-driven adventure game.", download: "https://store.steampowered.com/app/319630/Life_is_Strange/" },
+            { title: "The Walking Dead", description: "A narrative-driven adventure game.", download: "https://store.steampowered.com/app/207610/The_Walking_Dead/" },
+            { title: "Detroit: Become Human", description: "A narrative-driven adventure game.", download: "https://store.steampowered.com/app/1222140/Detroit_Become_Human/" },
+            { title: "Heavy Rain", description: "A narrative-driven adventure game.", download: "https://store.steampowered.com/app/960910/Heavy_Rain/" },
+            { title: "Until Dawn", description: "A narrative-driven horror game.", download: "https://store.playstation.com/en-us/product/UP9000-CUSA04640_00-UNTILDAWNGAME000" },
+            { title: "Little Nightmares", description: "A puzzle-platformer horror game.", download: "https://store.steampowered.com/app/424840/Little_Nightmares/" },
+            { title: "Inside", description: "A puzzle-platformer game.", download: "https://store.steampowered.com/app/304430/INSIDE/" },
+            { title: "Limbo", description: "A puzzle-platformer game.", download: "https://store.steampowered.com/app/48000/LIMBO/" },
+            { title: "Ori and the Blind Forest", description: "A Metroidvania platformer game.", download: "https://store.steampowered.com/app/261570/Ori_and_the_Blind_Forest/" },
+            { title: "Ori and the Will of the Wisps", description: "A Metroidvania platformer game.", download: "https://store.steampowered.com/app/1057090/Ori_and_the_Will_of_the_Wisps/" },
+            { title: "Hollow Knight: Silksong", description: "A Metroidvania action-adventure game.", download: "https://store.steampowered.com/app/1030300/Hollow_Knight_Silksong/" },
+            { title: "Dead Cells", description: "A roguelike Metroidvania game.", download: "https://store.steampowered.com/app/588650/Dead_Cells/" },
+            { title: "Hades", description: "A roguelike action game.", download: "https://store.steampowered.com/app/1145360/Hades/" },
+            { title: "Slay the Spire", description: "A roguelike deck-building game.", download: "https://store.steampowered.com/app/646570/Slay_the_Spire/" },
+            { title: "Returnal", description: "A roguelike third-person shooter.", download: "https://store.playstation.com/en-us/product/UP9000-PPSA01449_00-RETURNALFULLGAME" },
+            { title: "Risk of Rain 2", description: "A roguelike third-person shooter.", download: "https://store.steampowered.com/app/632360/Risk_of_Rain_2/" },
+            { title: "Enter the Gungeon", description: "A roguelike bullet-hell game.", download: "https://store.steampowered.com/app/311690/Enter_the_Gungeon/" },
+            { title: "Binding of Isaac: Rebirth", description: "A roguelike dungeon crawler.", download: "https://store.steampowered.com/app/250900/The_Binding_of_Isaac_Rebirth/" },
+            { title: "Darkest Dungeon", description: "A roguelike dungeon crawler.", download: "https://store.steampowered.com/app/262060/Darkest_Dungeon/" },
+            { title: "FTL: Faster Than Light", description: "A roguelike space strategy game.", download: "https://store.steampowered.com/app/212680/FTL_Faster_Than_Light/" },
+            { title: "Into the Breach", description: "A roguelike strategy game.", download: "https://store.steampowered.com/app/590380/Into_the_Breach/" },
+            { title: "Spelunky 2", description: "A roguelike platformer game.", download: "https://store.steampowered.com/app/418530/Spelunky_2/" },
+            { title: "Rogue Legacy 2", description: "A roguelike platformer game.", download: "https://store.steampowered.com/app/1253920/Rogue_Legacy_2/" },
+            { title: "Loop Hero", description: "A roguelike deck-building game.", download: "https://store.steampowered.com/app/1282730/Loop_Hero/" },
+            { title: "Monster Train", description: "A roguelike deck-building game.", download: "https://store.steampowered.com/app/1102190/Monster_Train/" },
+            { title: "Griftlands", description: "A roguelike deck-building game.", download: "https://store.steampowered.com/app/601840/Griftlands/" },
+            { title: "Inscryption", description: "A roguelike deck-building game.", download: "https://store.steampowered.com/app/1092790/Inscryption/" },
+            { title: "Vampire Survivors", description: "A roguelike bullet-hell game.", download: "https://store.steampowered.com/app/1794680/Vampire_Survivors/" },
+            { title: "Cult of the Lamb", description: "A roguelike action-adventure game.", download: "https://store.steampowered.com/app/1313140/Cult_of_the_Lamb/" },
+            { title: "Hades II", description: "A roguelike action game.", download: "https://store.steampowered.com/app/1145360/Hades/" },
+            { title: "PUBG Mobile", description: "A battle royale game where 100 players fight to be the last one standing.", download: "https://play.google.com/store/apps/details?id=com.tencent.ig" },
+            { title: "Call of Duty: Mobile", description: "A first-person shooter with multiplayer modes and battle royale.", download: "https://play.google.com/store/apps/details?id=com.activision.callofduty.shooter" },
+            { title: "Genshin Impact", description: "An open-world action RPG with stunning visuals and elemental combat.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.GenshinImpact" },
+            { title: "Mobile Legends: Bang Bang", description: "A popular MOBA game with fast-paced 5v5 battles.", download: "https://play.google.com/store/apps/details?id=com.mobile.legends" },
+            { title: "Clash Royale", description: "A real-time multiplayer game combining card strategy and tower defense.", download: "https://play.google.com/store/apps/details?id=com.supercell.clashroyale" },
+            { title: "Clash of Clans", description: "A strategy game where you build villages and battle other players.", download: "https://play.google.com/store/apps/details?id=com.supercell.clashofclans" },
+            { title: "Among Us", description: "A multiplayer party game of teamwork and betrayal.", download: "https://play.google.com/store/apps/details?id=com.innersloth.spacemafia" },
+            { title: "Pokémon GO", description: "An augmented reality game where you catch Pokémon in the real world.", download: "https://play.google.com/store/apps/details?id=com.nianticlabs.pokemongo" },
+            { title: "Free Fire", description: "A battle royale game with fast-paced matches and survival gameplay.", download: "https://play.google.com/store/apps/details?id=com.dts.freefireth" },
+            { title: "Roblox", description: "A platform where you can play and create games in a virtual world.", download: "https://play.google.com/store/apps/details?id=com.roblox.client" },
+            { title: "Minecraft", description: "A sandbox game where you can build and explore infinite worlds.", download: "https://play.google.com/store/apps/details?id=com.mojang.minecraftpe" },
+            { title: "Subway Surfers", description: "An endless runner game where you dodge trains and collect coins.", download: "https://play.google.com/store/apps/details?id=com.kiloo.subwaysurf" },
+            { title: "Candy Crush Saga", description: "A puzzle game where you match candies to complete levels.", download: "https://play.google.com/store/apps/details?id=com.king.candycrushsaga" },
+            { title: "8 Ball Pool", description: "A multiplayer pool game where you compete in 1v1 matches.", download: "https://play.google.com/store/apps/details?id=com.miniclip.eightballpool" },
+            { title: "Asphalt 9: Legends", description: "A racing game with high-speed cars and stunning graphics.", download: "https://play.google.com/store/apps/details?id=com.gameloft.android.ANMP.GloftA9HM" },
+            { title: "Brawl Stars", description: "A fast-paced multiplayer game with various game modes.", download: "https://play.google.com/store/apps/details?id=com.supercell.brawlstars" },
+            { title: "Honkai: Star Rail", description: "A turn-based RPG set in a sci-fi universe with stunning visuals.", download: "https://play.google.com/store/apps/details?id=com.HoYoverse.hkrpgoversea" },
+            { title: "Honkai Impact 3rd", description: "An action RPG with anime-style graphics and fast-paced combat.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.honkaiimpact3" },
+            { title: "AFK Arena", description: "A casual RPG where you collect heroes and battle in idle gameplay.", download: "https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp" },
+            { title: "Raid: Shadow Legends", description: "A fantasy RPG with turn-based combat and hero collection.", download: "https://play.google.com/store/apps/details?id=com.plarium.raidlegends" },
+            { title: "League of Legends: Wild Rift", description: "A mobile version of the popular MOBA game League of Legends.", download: "https://play.google.com/store/apps/details?id=com.riotgames.league.wildrift" },
+            { title: "Apex Legends Mobile", description: "A mobile version of the popular battle royale game Apex Legends.", download: "https://play.google.com/store/apps/details?id=com.ea.gp.apexlegendsmobilefps" },
+            { title: "FIFA Mobile", description: "A soccer game with realistic gameplay and team management.", download: "https://play.google.com/store/apps/details?id=com.ea.gp.fifamobile" },
+            { title: "NBA 2K Mobile", description: "A basketball game with realistic graphics and gameplay.", download: "https://play.google.com/store/apps/details?id=com.take2.nba2kmobile" },
+            { title: "Plants vs. Zombies 2", description: "A tower defense game where you use plants to fight zombies.", download: "https://play.google.com/store/apps/details?id=com.ea.game.pvz2_row" },
+            { title: "Monument Valley", description: "A puzzle game with stunning visuals and mind-bending mechanics.", download: "https://play.google.com/store/apps/details?id=com.ustwo.monumentvalley" },
+            { title: "Alto's Odyssey", description: "An endless runner game with beautiful visuals and relaxing gameplay.", download: "https://play.google.com/store/apps/details?id=com.noodlecake.altosodyssey" },
+            { title: "Stardew Valley", description: "A farming simulation game where you build and manage your dream farm.", download: "https://play.google.com/store/apps/details?id=com.chucklefish.stardewvalley" },
+            { title: "Terraria", description: "A sandbox adventure game with exploration, crafting, and combat.", download: "https://play.google.com/store/apps/details?id=com.and.games505.TerrariaPaid" },
+            { title: "Bloons TD 6", description: "A tower defense game where you pop balloons with monkeys.", download: "https://play.google.com/store/apps/details?id=com.ninjakiwi.bloonstd6" },
+            { title: "Geometry Dash", description: "A rhythm-based platformer with challenging levels.", download: "https://play.google.com/store/apps/details?id=com.robtopx.geometryjump" },
+            { title: "Hearthstone", description: "A digital card game set in the Warcraft universe.", download: "https://play.google.com/store/apps/details?id=com.blizzard.wtcg.hearthstone" },
+            { title: "Legends of Runeterra", description: "A strategy card game set in the League of Legends universe.", download: "https://play.google.com/store/apps/details?id=com.riotgames.legendsofruneterra" },
+            { title: "Garena Free Fire Max", description: "An enhanced version of Free Fire with better graphics and gameplay.", download: "https://play.google.com/store/apps/details?id=com.dts.freefiremax" },
+            { title: "Ludo King", description: "A digital version of the classic board game Ludo.", download: "https://play.google.com/store/apps/details?id=com.ludo.king" },
+            { title: "Chess.com", description: "A platform to play chess online with players worldwide.", download: "https://play.google.com/store/apps/details?id=com.chess" },
+            { title: "Wordscapes", description: "A word puzzle game with relaxing gameplay and beautiful visuals.", download: "https://play.google.com/store/apps/details?id=com.peoplefun.wordcross" },
+            { title: "Homescapes", description: "A puzzle game where you renovate a mansion by solving match-3 levels.", download: "https://play.google.com/store/apps/details?id=com.playrix.homescapes" },
+            { title: "Gardenscapes", description: "A match-3 puzzle game where you restore a garden.", download: "https://play.google.com/store/apps/details?id=com.playrix.gardenscapes" },
+            { title: "Fishdom", description: "A match-3 puzzle game where you build and decorate aquariums.", download: "https://play.google.com/store/apps/details?id=com.playrix.fishdomdd.gplay" },
+            { title: "Angry Birds 2", description: "A puzzle game where you fling birds to destroy structures.", download: "https://play.google.com/store/apps/details?id=com.rovio.baba" },
+            { title: "Temple Run 2", description: "An endless runner game where you escape from a monster.", download: "https://play.google.com/store/apps/details?id=com.imangi.templerun2" },
+            { title: "Hill Climb Racing", description: "A physics-based driving game with challenging terrain.", download: "https://play.google.com/store/apps/details?id=com.fingersoft.hillclimb" },
+            { title: "Shadow Fight 2", description: "A fighting game with RPG elements and shadowy visuals.", download: "https://play.google.com/store/apps/details?id=com.nekki.shadowfight" },
+            { title: "Shadow Fight 3", description: "A 3D fighting game with deep customization and combat.", download: "https://play.google.com/store/apps/details?id=com.nekki.shadowfight3" },
+            { title: "Marvel Contest of Champions", description: "A fighting game featuring Marvel superheroes and villains.", download: "https://play.google.com/store/apps/details?id=com.kabam.marvelbattle" },
+            { title: "DC Legends: Battle for Justice", description: "A strategy RPG featuring DC superheroes and villains.", download: "https://play.google.com/store/apps/details?id=com.wb.goog.dc.universe.legends" },
+            { title: "Star Wars: Galaxy of Heroes", description: "A strategy RPG featuring Star Wars characters.", download: "https://play.google.com/store/apps/details?id=com.ea.game.starwarscapital_row" },
+            { title: "Harry Potter: Hogwarts Mystery", description: "An RPG where you attend Hogwarts and live out your wizarding story.", download: "https://play.google.com/store/apps/details?id=com.tinyco.potter" },
+            { title: "The Sims Mobile", description: "A life simulation game where you create and control virtual people.", download: "https://play.google.com/store/apps/details?id=com.ea.gp.simsmobile" },
+            { title: "SimCity BuildIt", description: "A city-building game where you create and manage your own city.", download: "https://play.google.com/store/apps/details?id=com.ea.game.simcitymobile_row" },
+            { title: "Township", description: "A city-building game where you farm, mine, and trade.", download: "https://play.google.com/store/apps/details?id=com.playrix.township" },
+            { title: "Hay Day", description: "A farming simulation game where you grow crops and raise animals.", download: "https://play.google.com/store/apps/details?id=com.supercell.hayday" },
+            { title: "Cooking Fever", description: "A time management game where you run restaurants and cook dishes.", download: "https://play.google.com/store/apps/details?id=com.nordcurrent.canteenhd" },
+            { title: "Cooking Mama: Let's Cook!", description: "A cooking simulation game with fun mini-games.", download: "https://play.google.com/store/apps/details?id=jp.co.ofcr.cm00" },
+            { title: "My Talking Tom", description: "A virtual pet game where you take care of a cat.", download: "https://play.google.com/store/apps/details?id=com.outfit7.mytalkingtom" },
+            { title: "My Talking Angela", description: "A virtual pet game where you take care of a cat.", download: "https://play.google.com/store/apps/details?id=com.outfit7.mytalkingangelafree" },
+            { title: "Pou", description: "A virtual pet game where you take care of a cute alien.", download: "https://play.google.com/store/apps/details?id=me.pou.app" },
+            { title: "Animal Crossing: Pocket Camp", description: "A life simulation game where you build and decorate a campsite.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaca" },
+            { title: "Pokémon Masters EX", description: "A strategy RPG featuring Pokémon trainers and their Pokémon.", download: "https://play.google.com/store/apps/details?id=com.dena.a12026418" },
+            { title: "Pokémon Unite", description: "A MOBA game featuring Pokémon in 5v5 battles.", download: "https://play.google.com/store/apps/details?id=jp.pokemon.pokemonunite" },
+            { title: "Dragalia Lost", description: "An action RPG with co-op gameplay and a fantasy setting.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaga" },
+            { title: "Fire Emblem Heroes", description: "A strategy RPG featuring characters from the Fire Emblem series.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaba" },
+            { title: "Final Fantasy Brave Exvius", description: "A strategy RPG featuring characters from the Final Fantasy series.", download: "https://play.google.com/store/apps/details?id=com.square_enix.android_googleplay.FFBEWW" },
+            { title: "Dragon Ball Legends", description: "A fighting game featuring characters from the Dragon Ball series.", download: "https://play.google.com/store/apps/details?id=com.bandainamcoent.dblegends_ww" },
+            { title: "One Piece Bounty Rush", description: "A multiplayer action game featuring characters from One Piece.", download: "https://play.google.com/store/apps/details?id=com.bandainamcoent.opbrww" },
+            { title: "Naruto X Boruto Ninja Voltage", description: "A strategy RPG featuring characters from Naruto and Boruto.", download: "https://play.google.com/store/apps/details?id=com.bandainamcoent.ninjavoltage" },
+            { title: "Bleach: Brave Souls", description: "An action RPG featuring characters from the Bleach series.", download: "https://play.google.com/store/apps/details?id=com.klab.bleach" },
+            { title: "Yu-Gi-Oh! Duel Links", description: "A digital card game featuring Yu-Gi-Oh! characters and cards.", download: "https://play.google.com/store/apps/details?id=com.konami.ygodl" },
+            { title: "Fate/Grand Order", description: "A strategy RPG featuring characters from the Fate series.", download: "https://play.google.com/store/apps/details?id=com.aniplex.fategrandorder.en" },
+            { title: "Azur Lane", description: "A strategy RPG with shipgirls and naval combat.", download: "https://play.google.com/store/apps/details?id=com.YoStarJP.AzurLane" },
+            { title: "Arknights", description: "A tower defense RPG with anime-style graphics and deep strategy.", download: "https://play.google.com/store/apps/details?id=com.YoStarEN.Arknights" },
+            { title: "Girls' Frontline", description: "A strategy RPG with tactical combat and anime-style characters.", download: "https://play.google.com/store/apps/details?id=com.sunborn.girlsfrontline.en" },
+            { title: "Honkai Impact 3rd", description: "An action RPG with anime-style graphics and fast-paced combat.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.honkaiimpact3" },
+            { title: "Genshin Impact", description: "An open-world action RPG with stunning visuals and elemental combat.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.GenshinImpact" },
+            { title: "Honkai: Star Rail", description: "A turn-based RPG set in a sci-fi universe with stunning visuals.", download: "https://play.google.com/store/apps/details?id=com.HoYoverse.hkrpgoversea" },
+            { title: "AFK Arena", description: "A casual RPG where you collect heroes and battle in idle gameplay.", download: "https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp" },
+            { title: "Raid: Shadow Legends", description: "A fantasy RPG with turn-based combat and hero collection.", download: "https://play.google.com/store/apps/details?id=com.plarium.raidlegends" },
+            { title: "Summoners War", description: "A strategy RPG with monster collection and turn-based combat.", download: "https://play.google.com/store/apps/details?id=com.com2us.smon.normal.freefull.google.kr.android.common" },
+            { title: "Epic Seven", description: "A turn-based RPG with anime-style graphics and deep storytelling.", download: "https://play.google.com/store/apps/details?id=com.stove.epic7.google" },
+            { title: "Seven Deadly Sins: Grand Cross", description: "A strategy RPG featuring characters from the Seven Deadly Sins anime.", download: "https://play.google.com/store/apps/details?id=com.netmarble.nanagb" },
+            { title: "Black Desert Mobile", description: "An MMORPG with stunning graphics and open-world exploration.", download: "https://play.google.com/store/apps/details?id=com.pearlabyss.blackdesertm" },
+            { title: "Lineage 2: Revolution", description: "An MMORPG with large-scale battles and stunning visuals.", download: "https://play.google.com/store/apps/details?id=com.netmarble.lin2ws" },
+            { title: "EVE Echoes", description: "A space exploration MMORPG set in the EVE Online universe.", download: "https://play.google.com/store/apps/details?id=com.netease.eve.en" },
+            { title: "Old School RuneScape", description: "A mobile version of the classic MMORPG RuneScape.", download: "https://play.google.com/store/apps/details?id=com.jagex.runescape.android" },
+            { title: "Albion Online", description: "A sandbox MMORPG with player-driven economy and PvP.", download: "https://play.google.com/store/apps/details?id=com.albiononline" },
+            { title: "Villagers & Heroes", description: "An MMORPG with crafting, quests, and open-world exploration.", download: "https://play.google.com/store/apps/details?id=com.madottergames.villagers" },
+            { title: "Toram Online", description: "An MMORPG with deep customization and open-world exploration.", download: "https://play.google.com/store/apps/details?id=com.asobimo.toramonline" },
+            { title: "AdventureQuest 3D", description: "An MMORPG with cross-platform play and a fantasy setting.", download: "https://play.google.com/store/apps/details?id=com.battleon.aq3d" },
+            { title: "Sky: Children of the Light", description: "A social adventure game with stunning visuals and emotional storytelling.", download: "https://play.google.com/store/apps/details?id=com.tgc.sky.android" },
+            { title: "Grimvalor", description: "An action-platformer with challenging combat and exploration.", download: "https://play.google.com/store/apps/details?id=com.direlight.grimvalor" },
+            { title: "Dead Cells", description: "A rogue-like Metroidvania with fast-paced combat and procedurally generated levels.", download: "https://play.google.com/store/apps/details?id=com.playdigious.deadcells" },
+            { title: "Hyper Light Drifter", description: "An action RPG with pixel art and challenging gameplay.", download: "https://play.google.com/store/apps/details?id=com.abylight.hld" },
+            { title: "Oceanhorn", description: "An action-adventure game inspired by The Legend of Zelda series.", download: "https://play.google.com/store/apps/details?id=com.FDGEntertainment.Oceanhorn.gp" },
+            { title: "Evoland 2", description: "An action RPG that evolves through different gaming eras.", download: "https://play.google.com/store/apps/details?id=com.playdigious.evoland2" },
+            { title: "The Room: Old Sins", description: "A puzzle game with intricate mechanics and a mysterious story.", download: "https://play.google.com/store/apps/details?id=com.FireproofStudios.TheRoom4" },
+            { title: "Monument Valley 2", description: "A puzzle game with stunning visuals and mind-bending mechanics.", download: "https://play.google.com/store/apps/details?id=com.ustwo.monumentvalley2" },
+            { title: "Alto's Odyssey", description: "An endless runner game with beautiful visuals and relaxing gameplay.", download: "https://play.google.com/store/apps/details?id=com.noodlecake.altosodyssey" },
+            { title: "Alto's Adventure", description: "An endless runner game with stunning visuals and relaxing gameplay.", download: "https://play.google.com/store/apps/details?id=com.noodlecake.altosadventure" },
+            { title: "Limbo", description: "A puzzle-platformer with a dark and atmospheric setting.", download: "https://play.google.com/store/apps/details?id=com.playdead.limbo.full" },
+            { title: "Inside", description: "A puzzle-platformer with a haunting atmosphere and gripping story.", download: "https://play.google.com/store/apps/details?id=com.playdead.inside" },
+            { title: "Stardew Valley", description: "A farming simulation game where you build and manage your dream farm.", download: "https://play.google.com/store/apps/details?id=com.chucklefish.stardewvalley" },
+            { title: "Terraria", description: "A sandbox adventure game with exploration, crafting, and combat.", download: "https://play.google.com/store/apps/details?id=com.and.games505.TerrariaPaid" },
+            { title: "Don't Starve: Pocket Edition", description: "A survival game with a unique art style and challenging gameplay.", download: "https://play.google.com/store/apps/details?id=com.kleientertainment.doNotStarvePocket" },
+            { title: "Crashlands", description: "A crafting RPG with humor and exploration.", download: "https://play.google.com/store/apps/details?id=com.bscotch.crashlands" },
+            { title: "Minecraft", description: "A sandbox game where you can build and explore infinite worlds.", download: "https://play.google.com/store/apps/details?id=com.mojang.minecraftpe" },
+            { title: "Roblox", description: "A platform where you can play and create games in a virtual world.", download: "https://play.google.com/store/apps/details?id=com.roblox.client" },
+            { title: "Among Us", description: "A multiplayer party game of teamwork and betrayal.", download: "https://play.google.com/store/apps/details?id=com.innersloth.spacemafia" },
+            { title: "Brawl Stars", description: "A fast-paced multiplayer game with various game modes.", download: "https://play.google.com/store/apps/details?id=com.supercell.brawlstars" },
+            { title: "Clash Royale", description: "A real-time multiplayer game combining card strategy and tower defense.", download: "https://play.google.com/store/apps/details?id=com.supercell.clashroyale" },
+            { title: "Clash of Clans", description: "A strategy game where you build villages and battle other players.", download: "https://play.google.com/store/apps/details?id=com.supercell.clashofclans" },
+            { title: "PUBG Mobile", description: "A battle royale game where 100 players fight to be the last one standing.", download: "https://play.google.com/store/apps/details?id=com.tencent.ig" },
+            { title: "Call of Duty: Mobile", description: "A first-person shooter with multiplayer modes and battle royale.", download: "https://play.google.com/store/apps/details?id=com.activision.callofduty.shooter" },
+            { title: "Genshin Impact", description: "An open-world action RPG with stunning visuals and elemental combat.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.GenshinImpact" },
+            { title: "Mobile Legends: Bang Bang", description: "A popular MOBA game with fast-paced 5v5 battles.", download: "https://play.google.com/store/apps/details?id=com.mobile.legends" },
+            { title: "Free Fire", description: "A battle royale game with fast-paced matches and survival gameplay.", download: "https://play.google.com/store/apps/details?id=com.dts.freefireth" },
+            { title: "Apex Legends Mobile", description: "A mobile version of the popular battle royale game Apex Legends.", download: "https://play.google.com/store/apps/details?id=com.ea.gp.apexlegendsmobilefps" },
+            { title: "League of Legends: Wild Rift", description: "A mobile version of the popular MOBA game League of Legends.", download: "https://play.google.com/store/apps/details?id=com.riotgames.league.wildrift" },
+            { title: "Pokémon GO", description: "An augmented reality game where you catch Pokémon in the real world.", download: "https://play.google.com/store/apps/details?id=com.nianticlabs.pokemongo" },
+            { title: "Pokémon Unite", description: "A MOBA game featuring Pokémon in 5v5 battles.", download: "https://play.google.com/store/apps/details?id=jp.pokemon.pokemonunite" },
+            { title: "Pokémon Masters EX", description: "A strategy RPG featuring Pokémon trainers and their Pokémon.", download: "https://play.google.com/store/apps/details?id=com.dena.a12026418" },
+            { title: "Animal Crossing: Pocket Camp", description: "A life simulation game where you build and decorate a campsite.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaca" },
+            { title: "Mario Kart Tour", description: "A racing game featuring Mario Kart characters and tracks.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaka" },
+            { title: "Super Mario Run", description: "A platformer where you control Mario in endless running levels.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zara" },
+            { title: "Fire Emblem Heroes", description: "A strategy RPG featuring characters from the Fire Emblem series.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaba" },
+            { title: "Dragalia Lost", description: "An action RPG with co-op gameplay and a fantasy setting.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaga" },
+            { title: "Final Fantasy Brave Exvius", description: "A strategy RPG featuring characters from the Final Fantasy series.", download: "https://play.google.com/store/apps/details?id=com.square_enix.android_googleplay.FFBEWW" },
+            { title: "Dragon Ball Legends", description: "A fighting game featuring characters from the Dragon Ball series.", download: "https://play.google.com/store/apps/details?id=com.bandainamcoent.dblegends_ww" },
+            { title: "One Piece Bounty Rush", description: "A multiplayer action game featuring characters from One Piece.", download: "https://play.google.com/store/apps/details?id=com.bandainamcoent.opbrww" },
+            { title: "Naruto X Boruto Ninja Voltage", description: "A strategy RPG featuring characters from Naruto and Boruto.", download: "https://play.google.com/store/apps/details?id=com.bandainamcoent.ninjavoltage" },
+            { title: "Bleach: Brave Souls", description: "An action RPG featuring characters from the Bleach series.", download: "https://play.google.com/store/apps/details?id=com.klab.bleach" },
+            { title: "Yu-Gi-Oh! Duel Links", description: "A digital card game featuring Yu-Gi-Oh! characters and cards.", download: "https://play.google.com/store/apps/details?id=com.konami.ygodl" },
+            { title: "Fate/Grand Order", description: "A strategy RPG featuring characters from the Fate series.", download: "https://play.google.com/store/apps/details?id=com.aniplex.fategrandorder.en" },
+            { title: "Azur Lane", description: "A strategy RPG with shipgirls and naval combat.", download: "https://play.google.com/store/apps/details?id=com.YoStarJP.AzurLane" },
+            { title: "Arknights", description: "A tower defense RPG with anime-style graphics and deep strategy.", download: "https://play.google.com/store/apps/details?id=com.YoStarEN.Arknights" },
+            { title: "Girls' Frontline", description: "A strategy RPG with tactical combat and anime-style characters.", download: "https://play.google.com/store/apps/details?id=com.sunborn.girlsfrontline.en" },
+            { title: "Honkai Impact 3rd", description: "An action RPG with anime-style graphics and fast-paced combat.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.honkaiimpact3" },
+            { title: "Genshin Impact", description: "An open-world action RPG with stunning visuals and elemental combat.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.GenshinImpact" },
+            { title: "Honkai: Star Rail", description: "A turn-based RPG set in a sci-fi universe with stunning visuals.", download: "https://play.google.com/store/apps/details?id=com.HoYoverse.hkrpgoversea" },
+            { title: "AFK Arena", description: "A casual RPG where you collect heroes and battle in idle gameplay.", download: "https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp" },
+            { title: "Raid: Shadow Legends", description: "A fantasy RPG with turn-based combat and hero collection.", download: "https://play.google.com/store/apps/details?id=com.plarium.raidlegends" },
+            { title: "Summoners War", description: "A strategy RPG with monster collection and turn-based combat.", download: "https://play.google.com/store/apps/details?id=com.com2us.smon.normal.freefull.google.kr.android.common" },
+            { title: "Epic Seven", description: "A turn-based RPG with anime-style graphics and deep storytelling.", download: "https://play.google.com/store/apps/details?id=com.stove.epic7.google" },
+            { title: "Seven Deadly Sins: Grand Cross", description: "A strategy RPG featuring characters from the Seven Deadly Sins anime.", download: "https://play.google.com/store/apps/details?id=com.netmarble.nanagb" },
+            { title: "Black Desert Mobile", description: "An MMORPG with stunning graphics and open-world exploration.", download: "https://play.google.com/store/apps/details?id=com.pearlabyss.blackdesertm" },
+            { title: "Lineage 2: Revolution", description: "An MMORPG with large-scale battles and stunning visuals.", download: "https://play.google.com/store/apps/details?id=com.netmarble.lin2ws" },
+            { title: "EVE Echoes", description: "A space exploration MMORPG set in the EVE Online universe.", download: "https://play.google.com/store/apps/details?id=com.netease.eve.en" },
+            { title: "Old School RuneScape", description: "A mobile version of the classic MMORPG RuneScape.", download: "https://play.google.com/store/apps/details?id=com.jagex.runescape.android" },
+            { title: "Albion Online", description: "A sandbox MMORPG with player-driven economy and PvP.", download: "https://play.google.com/store/apps/details?id=com.albiononline" },
+            { title: "Villagers & Heroes", description: "An MMORPG with crafting, quests, and open-world exploration.", download: "https://play.google.com/store/apps/details?id=com.madottergames.villagers" },
+            { title: "Toram Online", description: "An MMORPG with deep customization and open-world exploration.", download: "https://play.google.com/store/apps/details?id=com.asobimo.toramonline" },
+            { title: "AdventureQuest 3D", description: "An MMORPG with cross-platform play and a fantasy setting.", download: "https://play.google.com/store/apps/details?id=com.battleon.aq3d" },
+            { title: "Sky: Children of the Light", description: "A social adventure game with stunning visuals and emotional storytelling.", download: "https://play.google.com/store/apps/details?id=com.tgc.sky.android" },
+            { title: "Grimvalor", description: "An action-platformer with challenging combat and exploration.", download: "https://play.google.com/store/apps/details?id=com.direlight.grimvalor" },
+            { title: "Dead Cells", description: "A rogue-like Metroidvania with fast-paced combat and procedurally generated levels.", download: "https://play.google.com/store/apps/details?id=com.playdigious.deadcells" },
+            { title: "Hyper Light Drifter", description: "An action RPG with pixel art and challenging gameplay.", download: "https://play.google.com/store/apps/details?id=com.abylight.hld" },
+            { title: "Oceanhorn", description: "An action-adventure game inspired by The Legend of Zelda series.", download: "https://play.google.com/store/apps/details?id=com.FDGEntertainment.Oceanhorn.gp" },
+            { title: "Evoland 2", description: "An action RPG that evolves through different gaming eras.", download: "https://play.google.com/store/apps/details?id=com.playdigious.evoland2" },
+            { title: "The Room: Old Sins", description: "A puzzle game with intricate mechanics and a mysterious story.", download: "https://play.google.com/store/apps/details?id=com.FireproofStudios.TheRoom4" },
+            { title: "Monument Valley 2", description: "A puzzle game with stunning visuals and mind-bending mechanics.", download: "https://play.google.com/store/apps/details?id=com.ustwo.monumentvalley2" },
+            { title: "Alto's Odyssey", description: "An endless runner game with beautiful visuals and relaxing gameplay.", download: "https://play.google.com/store/apps/details?id=com.noodlecake.altosodyssey" },
+            { title: "Alto's Adventure", description: "An endless runner game with stunning visuals and relaxing gameplay.", download: "https://play.google.com/store/apps/details?id=com.noodlecake.altosadventure" },
+            { title: "Limbo", description: "A puzzle-platformer with a dark and atmospheric setting.", download: "https://play.google.com/store/apps/details?id=com.playdead.limbo.full" },
+            { title: "Inside", description: "A puzzle-platformer with a haunting atmosphere and gripping story.", download: "https://play.google.com/store/apps/details?id=com.playdead.inside" },
+            { title: "Stardew Valley", description: "A farming simulation game where you build and manage your dream farm.", download: "https://play.google.com/store/apps/details?id=com.chucklefish.stardewvalley" },
+            { title: "Terraria", description: "A sandbox adventure game with exploration, crafting, and combat.", download: "https://play.google.com/store/apps/details?id=com.and.games505.TerrariaPaid" },
+            { title: "Don't Starve: Pocket Edition", description: "A survival game with a unique art style and challenging gameplay.", download: "https://play.google.com/store/apps/details?id=com.kleientertainment.doNotStarvePocket" },
+            { title: "Crashlands", description: "A crafting RPG with humor and exploration.", download: "https://play.google.com/store/apps/details?id=com.bscotch.crashlands" },
+            { title: "Minecraft", description: "A sandbox game where you can build and explore infinite worlds.", download: "https://play.google.com/store/apps/details?id=com.mojang.minecraftpe" },
+            { title: "Roblox", description: "A platform where you can play and create games in a virtual world.", download: "https://play.google.com/store/apps/details?id=com.roblox.client" },
+            { title: "Among Us", description: "A multiplayer party game of teamwork and betrayal.", download: "https://play.google.com/store/apps/details?id=com.innersloth.spacemafia" },
+            { title: "Brawl Stars", description: "A fast-paced multiplayer game with various game modes.", download: "https://play.google.com/store/apps/details?id=com.supercell.brawlstars" },
+            { title: "Clash Royale", description: "A real-time multiplayer game combining card strategy and tower defense.", download: "https://play.google.com/store/apps/details?id=com.supercell.clashroyale" },
+            { title: "Clash of Clans", description: "A strategy game where you build villages and battle other players.", download: "https://play.google.com/store/apps/details?id=com.supercell.clashofclans" },
+            { title: "PUBG Mobile", description: "A battle royale game where 100 players fight to be the last one standing.", download: "https://play.google.com/store/apps/details?id=com.tencent.ig" },
+            { title: "Call of Duty: Mobile", description: "A first-person shooter with multiplayer modes and battle royale.", download: "https://play.google.com/store/apps/details?id=com.activision.callofduty.shooter" },
+            { title: "Genshin Impact", description: "An open-world action RPG with stunning visuals and elemental combat.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.GenshinImpact" },
+            { title: "Mobile Legends: Bang Bang", description: "A popular MOBA game with fast-paced 5v5 battles.", download: "https://play.google.com/store/apps/details?id=com.mobile.legends" },
+            { title: "Free Fire", description: "A battle royale game with fast-paced matches and survival gameplay.", download: "https://play.google.com/store/apps/details?id=com.dts.freefireth" },
+            { title: "Apex Legends Mobile", description: "A mobile version of the popular battle royale game Apex Legends.", download: "https://play.google.com/store/apps/details?id=com.ea.gp.apexlegendsmobilefps" },
+            { title: "League of Legends: Wild Rift", description: "A mobile version of the popular MOBA game League of Legends.", download: "https://play.google.com/store/apps/details?id=com.riotgames.league.wildrift" },
+            { title: "Pokémon GO", description: "An augmented reality game where you catch Pokémon in the real world.", download: "https://play.google.com/store/apps/details?id=com.nianticlabs.pokemongo" },
+            { title: "Pokémon Unite", description: "A MOBA game featuring Pokémon in 5v5 battles.", download: "https://play.google.com/store/apps/details?id=jp.pokemon.pokemonunite" },
+            { title: "Pokémon Masters EX", description: "A strategy RPG featuring Pokémon trainers and their Pokémon.", download: "https://play.google.com/store/apps/details?id=com.dena.a12026418" },
+            { title: "Animal Crossing: Pocket Camp", description: "A life simulation game where you build and decorate a campsite.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaca" },
+            { title: "Mario Kart Tour", description: "A racing game featuring Mario Kart characters and tracks.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaka" },
+            { title: "Super Mario Run", description: "A platformer where you control Mario in endless running levels.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zara" },
+            { title: "Fire Emblem Heroes", description: "A strategy RPG featuring characters from the Fire Emblem series.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaba" },
+            { title: "Dragalia Lost", description: "An action RPG with co-op gameplay and a fantasy setting.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaga" },
+            { title: "Final Fantasy Brave Exvius", description: "A strategy RPG featuring characters from the Final Fantasy series.", download: "https://play.google.com/store/apps/details?id=com.square_enix.android_googleplay.FFBEWW" },
+            { title: "Dragon Ball Legends", description: "A fighting game featuring characters from the Dragon Ball series.", download: "https://play.google.com/store/apps/details?id=com.bandainamcoent.dblegends_ww" },
+            { title: "One Piece Bounty Rush", description: "A multiplayer action game featuring characters from One Piece.", download: "https://play.google.com/store/apps/details?id=com.bandainamcoent.opbrww" },
+            { title: "Naruto X Boruto Ninja Voltage", description: "A strategy RPG featuring characters from Naruto and Boruto.", download: "https://play.google.com/store/apps/details?id=com.bandainamcoent.ninjavoltage" },
+            { title: "Bleach: Brave Souls", description: "An action RPG featuring characters from the Bleach series.", download: "https://play.google.com/store/apps/details?id=com.klab.bleach" },
+            { title: "Yu-Gi-Oh! Duel Links", description: "A digital card game featuring Yu-Gi-Oh! characters and cards.", download: "https://play.google.com/store/apps/details?id=com.konami.ygodl" },
+            { title: "Fate/Grand Order", description: "A strategy RPG featuring characters from the Fate series.", download: "https://play.google.com/store/apps/details?id=com.aniplex.fategrandorder.en" },
+            { title: "Azur Lane", description: "A strategy RPG with shipgirls and naval combat.", download: "https://play.google.com/store/apps/details?id=com.YoStarJP.AzurLane" },
+            { title: "Arknights", description: "A tower defense RPG with anime-style graphics and deep strategy.", download: "https://play.google.com/store/apps/details?id=com.YoStarEN.Arknights" },
+            { title: "Girls' Frontline", description: "A strategy RPG with tactical combat and anime-style characters.", download: "https://play.google.com/store/apps/details?id=com.sunborn.girlsfrontline.en" },
+            { title: "Honkai Impact 3rd", description: "An action RPG with anime-style graphics and fast-paced combat.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.honkaiimpact3" },
+            { title: "Genshin Impact", description: "An open-world action RPG with stunning visuals and elemental combat.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.GenshinImpact" },
+            { title: "Honkai: Star Rail", description: "A turn-based RPG set in a sci-fi universe with stunning visuals.", download: "https://play.google.com/store/apps/details?id=com.HoYoverse.hkrpgoversea" },
+            { title: "AFK Arena", description: "A casual RPG where you collect heroes and battle in idle gameplay.", download: "https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp" },
+            { title: "Raid: Shadow Legends", description: "A fantasy RPG with turn-based combat and hero collection.", download: "https://play.google.com/store/apps/details?id=com.plarium.raidlegends" },
+            { title: "Summoners War", description: "A strategy RPG with monster collection and turn-based combat.", download: "https://play.google.com/store/apps/details?id=com.com2us.smon.normal.freefull.google.kr.android.common" },
+            { title: "Epic Seven", description: "A turn-based RPG with anime-style graphics and deep storytelling.", download: "https://play.google.com/store/apps/details?id=com.stove.epic7.google" },
+            { title: "Seven Deadly Sins: Grand Cross", description: "A strategy RPG featuring characters from the Seven Deadly Sins anime.", download: "https://play.google.com/store/apps/details?id=com.netmarble.nanagb" },
+            { title: "Black Desert Mobile", description: "An MMORPG with stunning graphics and open-world exploration.", download: "https://play.google.com/store/apps/details?id=com.pearlabyss.blackdesertm" },
+            { title: "Lineage 2: Revolution", description: "An MMORPG with large-scale battles and stunning visuals.", download: "https://play.google.com/store/apps/details?id=com.netmarble.lin2ws" },
+            { title: "EVE Echoes", description: "A space exploration MMORPG set in the EVE Online universe.", download: "https://play.google.com/store/apps/details?id=com.netease.eve.en" },
+            { title: "Old School RuneScape", description: "A mobile version of the classic MMORPG RuneScape.", download: "https://play.google.com/store/apps/details?id=com.jagex.runescape.android" },
+            { title: "Albion Online", description: "A sandbox MMORPG with player-driven economy and PvP.", download: "https://play.google.com/store/apps/details?id=com.albiononline" },
+            { title: "Villagers & Heroes", description: "An MMORPG with crafting, quests, and open-world exploration.", download: "https://play.google.com/store/apps/details?id=com.madottergames.villagers" },
+            { title: "Toram Online", description: "An MMORPG with deep customization and open-world exploration.", download: "https://play.google.com/store/apps/details?id=com.asobimo.toramonline" },
+            { title: "AdventureQuest 3D", description: "An MMORPG with cross-platform play and a fantasy setting.", download: "https://play.google.com/store/apps/details?id=com.battleon.aq3d" },
+            { title: "Sky: Children of the Light", description: "A social adventure game with stunning visuals and emotional storytelling.", download: "https://play.google.com/store/apps/details?id=com.tgc.sky.android" },
+            { title: "Grimvalor", description: "An action-platformer with challenging combat and exploration.", download: "https://play.google.com/store/apps/details?id=com.direlight.grimvalor" },
+            { title: "Dead Cells", description: "A rogue-like Metroidvania with fast-paced combat and procedurally generated levels.", download: "https://play.google.com/store/apps/details?id=com.playdigious.deadcells" },
+            { title: "Hyper Light Drifter", description: "An action RPG with pixel art and challenging gameplay.", download: "https://play.google.com/store/apps/details?id=com.abylight.hld" },
+            { title: "Oceanhorn", description: "An action-adventure game inspired by The Legend of Zelda series.", download: "https://play.google.com/store/apps/details?id=com.FDGEntertainment.Oceanhorn.gp" },
+            { title: "Evoland 2", description: "An action RPG that evolves through different gaming eras.", download: "https://play.google.com/store/apps/details?id=com.playdigious.evoland2" },
+            { title: "The Room: Old Sins", description: "A puzzle game with intricate mechanics and a mysterious story.", download: "https://play.google.com/store/apps/details?id=com.FireproofStudios.TheRoom4" },
+            { title: "Monument Valley 2", description: "A puzzle game with stunning visuals and mind-bending mechanics.", download: "https://play.google.com/store/apps/details?id=com.ustwo.monumentvalley2" },
+            { title: "Alto's Odyssey", description: "An endless runner game with beautiful visuals and relaxing gameplay.", download: "https://play.google.com/store/apps/details?id=com.noodlecake.altosodyssey" },
+            { title: "Alto's Adventure", description: "An endless runner game with stunning visuals and relaxing gameplay.", download: "https://play.google.com/store/apps/details?id=com.noodlecake.altosadventure" },
+            { title: "Limbo", description: "A puzzle-platformer with a dark and atmospheric setting.", download: "https://play.google.com/store/apps/details?id=com.playdead.limbo.full" },
+            { title: "Inside", description: "A puzzle-platformer with a haunting atmosphere and gripping story.", download: "https://play.google.com/store/apps/details?id=com.playdead.inside" },
+            { title: "Stardew Valley", description: "A farming simulation game where you build and manage your dream farm.", download: "https://play.google.com/store/apps/details?id=com.chucklefish.stardewvalley" },
+            { title: "Terraria", description: "A sandbox adventure game with exploration, crafting, and combat.", download: "https://play.google.com/store/apps/details?id=com.and.games505.TerrariaPaid" },
+            { title: "Don't Starve: Pocket Edition", description: "A survival game with a unique art style and challenging gameplay.", download: "https://play.google.com/store/apps/details?id=com.kleientertainment.doNotStarvePocket" },
+            { title: "Crashlands", description: "A crafting RPG with humor and exploration.", download: "https://play.google.com/store/apps/details?id=com.bscotch.crashlands" },
+            { title: "Among Us", description: "A multiplayer party game of teamwork and betrayal.", download: "https://play.google.com/store/apps/details?id=com.innersloth.spacemafia" },
+            { title: "Brawl Stars", description: "A fast-paced multiplayer game with various game modes.", download: "https://play.google.com/store/apps/details?id=com.supercell.brawlstars" },
+            { title: "Clash Royale", description: "A real-time multiplayer game combining card strategy and tower defense.", download: "https://play.google.com/store/apps/details?id=com.supercell.clashroyale" },
+            { title:"Tlauncher: Free Minecraft", description: "Want to play Minecraft For Free. Tlauncher is a platform that will able to play Minecraft for Free.", platform: "PC", download:"#"},
+            { title:"Pojav Launcher: Free Minecraft", description: "Want to play Minecraft For Free. Pojav Launcher is a platform that will able to play Minecraft for Free.", platform: "Mobile", download:"#"},
+            { title:"SK Launcher: Free Minecraft", description: "Want to play Minecraft For Free. SK Launcher is a platform that will able to play Minecraft for Free.", platform: "PC", download:"#"},
+            { title: "Clash of Clans", description: "A strategy game where you build villages and battle other players.", download: "https://play.google.com/store/apps/details?id=com.supercell.clashofclans" },
+            { title: "Car For Sale", description: "Luxury & super sports car selling Game.", platform: "PC", download: "#" },
+            { title: "Pal World", description: "Combination of many games Ultra realstic 3D game.", platform:"PC", download: "#" },
+        ];
+
+        // Function to dynamically add games to the page
+        function loadGames() {
+            const gameList = document.getElementById('gameList');
+            games.forEach(game => {
+                const gameItem = document.createElement('div');
+                gameItem.className = 'game-item';
+                gameItem.innerHTML = `
+                    <h2>${game.title}</h2>
+                    <p>${game.description}</p>
+                    <p><strong>Platform:</strong> ${game.platform}</p>
+                    <a href="${game.download}" class="download-btn">Download</a>
+                `;
+                gameList.appendChild(gameItem);
+            });
+        }
+
+        // Function to search games and highlight matching words
+        function searchGames() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const gameItems = document.querySelectorAll('.game-item');
+            gameItems.forEach(item => {
+                const title = item.querySelector('h2').textContent.toLowerCase();
+                if (title.includes(input)) {
+                    item.style.display = 'block';
+                    // Highlight matching words
+                    const regex = new RegExp(input, 'gi');
+                    item.querySelector('h2').innerHTML = item.querySelector('h2').textContent.replace(regex, match => `<span class="highlight">${match}</span>`);
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Load games when the page loads
+        window.onload = loadGames;
+    </script>
+</body>
+
+</html>

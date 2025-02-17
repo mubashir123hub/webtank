@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Games - WEBTANK</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+            color: #fff;
+            overflow-x: hidden;
+            text-align: center;
+            scroll-behavior: smooth;
+        }
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(6, 241, 65, 0.1);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, #00ffcc, #007bff);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(90deg, #007bff, #00ffcc);
+}
+html {
+    scroll-behavior:inherit ;
+}
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            background: linear-gradient(90deg, #00ffcc, #007bff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .search-bar {
+            width: 70%;
+            padding: 10px;
+            margin: 20px 0;
+            border: 2px solid #00ffcc;
+            border-radius: 30px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            outline: none;
+        }
+
+        .game-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .game-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            transition: transform 0.3s;
+        }
+
+        .game-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(90deg, #00ffcc, #007bff);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+        }
+                ::selection {
+    background: linear-gradient(90deg, #00ffcc, #ff00f2);
+    color: #7006c7f5;
+    text-shadow: 0 0 13px rgba(4, 96, 182, 0.952);
+}
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Mobile Games</h1>
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search games..." onkeyup="searchGames()">
+        <div class="game-list" id="gameList">
+            <script>
+                const gameData = [
+                    { name: "Clash of Clans", description: "A strategy-based multiplayer mobile game where players build and defend their villages.", download: "https://play.google.com/store/apps/details?id=com.supercell.clashofclans" },
+                    { name: "Among Us", description: "A fun multiplayer social deduction game where players work together to find the impostor.", download: "https://play.google.com/store/apps/details?id=com.innersloth.spacemafia" },
+                    { name: "PUBG Mobile", description: "A battle royale shooter where players fight to be the last one standing.", download: "https://play.google.com/store/apps/details?id=com.tencent.ig" },
+                    { name: "Call of Duty: Mobile", description: "A mobile version of the popular FPS franchise with battle royale and multiplayer modes.", download: "https://play.google.com/store/apps/details?id=com.activision.callofduty.shooter" },
+                    { name: "Genshin Impact", description: "An open-world RPG with action-packed gameplay and a deep storyline.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.GenshinImpact" },
+                    { name: "Candy Crush Saga", description: "A match-three puzzle game with hundreds of levels and addictive gameplay.", download: "https://play.google.com/store/apps/details?id=com.king.candycrushsaga" },
+                    { name: "Subway Surfers", description: "An endless runner game where players dodge obstacles and collect coins.", download: "https://play.google.com/store/apps/details?id=com.kiloo.subwaysurf" },
+                    { name: "Pokémon GO", description: "An augmented reality game where players catch Pokémon in the real world.", download: "https://play.google.com/store/apps/details?id=com.nianticlabs.pokemongo" },
+                    { name: "Free Fire", description: "A fast-paced battle royale game optimized for low-end devices.", download: "https://play.google.com/store/apps/details?id=com.dts.freefireth" },
+                    { name: "PUBG Mobile", description: "A battle royale game where 100 players fight to be the last one standing.", download: "https://play.google.com/store/apps/details?id=com.tencent.ig" },
+                    { name: "Call of Duty: Mobile", description: "A first-person shooter with multiplayer modes and battle royale.", download: "https://play.google.com/store/apps/details?id=com.activision.callofduty.shooter" },
+                    { name: "Genshin Impact", description: "An open-world action RPG with stunning visuals and elemental combat.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.GenshinImpact" },
+                    { name: "Mobile Legends: Bang Bang", description: "A popular MOBA game with fast-paced 5v5 battles.", download: "https://play.google.com/store/apps/details?id=com.mobile.legends" },
+                    { name: "Clash Royale", description: "A real-time multiplayer game combining card strategy and tower defense.", download: "https://play.google.com/store/apps/details?id=com.supercell.clashroyale" },
+                    { name: "Clash of Clans", description: "A strategy game where you build villages and battle other players.", download: "https://play.google.com/store/apps/details?id=com.supercell.clashofclans" },
+                    { name: "Among Us", description: "A multiplayer party game of teamwork and betrayal.", download: "https://play.google.com/store/apps/details?id=com.innersloth.spacemafia" },
+                    { name: "Pokémon GO", description: "An augmented reality game where you catch Pokémon in the real world.", download: "https://play.google.com/store/apps/details?id=com.nianticlabs.pokemongo" },
+                    { name: "Free Fire", description: "A battle royale game with fast-paced matches and survival gameplay.", download: "https://play.google.com/store/apps/details?id=com.dts.freefireth" },
+                    { name: "Roblox", description: "A platform where you can play and create games in a virtual world.", download: "https://play.google.com/store/apps/details?id=com.roblox.client" },
+                    { name: "Minecraft", description: "A sandbox game where you can build and explore infinite worlds.", download: "https://play.google.com/store/apps/details?id=com.mojang.minecraftpe" },
+                    { name: "Subway Surfers", description: "An endless runner game where you dodge trains and collect coins.", download: "https://play.google.com/store/apps/details?id=com.kiloo.subwaysurf" },
+                    { name: "Candy Crush Saga", description: "A puzzle game where you match candies to complete levels.", download: "https://play.google.com/store/apps/details?id=com.king.candycrushsaga" },
+                    { name: "8 Ball Pool", description: "A multiplayer pool game where you compete in 1v1 matches.", download: "https://play.google.com/store/apps/details?id=com.miniclip.eightballpool" },
+                    { name: "Asphalt 9: Legends", description: "A racing game with high-speed cars and stunning graphics.", download: "https://play.google.com/store/apps/details?id=com.gameloft.android.ANMP.GloftA9HM" },
+                    { name: "Brawl Stars", description: "A fast-paced multiplayer game with various game modes.", download: "https://play.google.com/store/apps/details?id=com.supercell.brawlstars" },
+                    { name: "Honkai: Star Rail", description: "A turn-based RPG set in a sci-fi universe with stunning visuals.", download: "https://play.google.com/store/apps/details?id=com.HoYoverse.hkrpgoversea" },
+                    { name: "Honkai Impact 3rd", description: "An action RPG with anime-style graphics and fast-paced combat.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.honkaiimpact3" },
+                    { name: "AFK Arena", description: "A casual RPG where you collect heroes and battle in idle gameplay.", download: "https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp" },
+                    { name: "Raid: Shadow Legends", description: "A fantasy RPG with turn-based combat and hero collection.", download: "https://play.google.com/store/apps/details?id=com.plarium.raidlegends" },
+                    { name: "League of Legends: Wild Rift", description: "A mobile version of the popular MOBA game League of Legends.", download: "https://play.google.com/store/apps/details?id=com.riotgames.league.wildrift" },
+                    { name: "Apex Legends Mobile", description: "A mobile version of the popular battle royale game Apex Legends.", download: "https://play.google.com/store/apps/details?id=com.ea.gp.apexlegendsmobilefps" },
+                    { name: "FIFA Mobile", description: "A soccer game with realistic gameplay and team management.", download: "https://play.google.com/store/apps/details?id=com.ea.gp.fifamobile" },
+                    { name: "NBA 2K Mobile", description: "A basketball game with realistic graphics and gameplay.", download: "https://play.google.com/store/apps/details?id=com.take2.nba2kmobile" },
+                    { name: "Plants vs. Zombies 2", description: "A tower defense game where you use plants to fight zombies.", download: "https://play.google.com/store/apps/details?id=com.ea.game.pvz2_row" },
+                    { name: "Monument Valley", description: "A puzzle game with stunning visuals and mind-bending mechanics.", download: "https://play.google.com/store/apps/details?id=com.ustwo.monumentvalley" },
+                    { name: "Alto's Odyssey", description: "An endless runner game with beautiful visuals and relaxing gameplay.", download: "https://play.google.com/store/apps/details?id=com.noodlecake.altosodyssey" },
+                    { name: "Stardew Valley", description: "A farming simulation game where you build and manage your dream farm.", download: "https://play.google.com/store/apps/details?id=com.chucklefish.stardewvalley" },
+                    { name: "Terraria", description: "A sandbox adventure game with exploration, crafting, and combat.", download: "https://play.google.com/store/apps/details?id=com.and.games505.TerrariaPaid" },
+                    { name: "Bloons TD 6", description: "A tower defense game where you pop balloons with monkeys.", download: "https://play.google.com/store/apps/details?id=com.ninjakiwi.bloonstd6" },
+                    { name: "Geometry Dash", description: "A rhythm-based platformer with challenging levels.", download: "https://play.google.com/store/apps/details?id=com.robtopx.geometryjump" },
+                    { name: "Hearthstone", description: "A digital card game set in the Warcraft universe.", download: "https://play.google.com/store/apps/details?id=com.blizzard.wtcg.hearthstone" },
+                    { name: "Legends of Runeterra", description: "A strategy card game set in the League of Legends universe.", download: "https://play.google.com/store/apps/details?id=com.riotgames.legendsofruneterra" },
+                    { name: "Garena Free Fire Max", description: "An enhanced version of Free Fire with better graphics and gameplay.", download: "https://play.google.com/store/apps/details?id=com.dts.freefiremax" },
+                    { name: "Ludo King", description: "A digital version of the classic board game Ludo.", download: "https://play.google.com/store/apps/details?id=com.ludo.king" },
+                    { name: "Chess.com", description: "A platform to play chess online with players worldwide.", download: "https://play.google.com/store/apps/details?id=com.chess" },
+                    { name: "Wordscapes", description: "A word puzzle game with relaxing gameplay and beautiful visuals.", download: "https://play.google.com/store/apps/details?id=com.peoplefun.wordcross" },
+                    { name: "Homescapes", description: "A puzzle game where you renovate a mansion by solving match-3 levels.", download: "https://play.google.com/store/apps/details?id=com.playrix.homescapes" },
+                    { name: "Gardenscapes", description: "A match-3 puzzle game where you restore a garden.", download: "https://play.google.com/store/apps/details?id=com.playrix.gardenscapes" },
+                    { name: "Fishdom", description: "A match-3 puzzle game where you build and decorate aquariums.", download: "https://play.google.com/store/apps/details?id=com.playrix.fishdomdd.gplay" },
+                    { name: "Angry Birds 2", description: "A puzzle game where you fling birds to destroy structures.", download: "https://play.google.com/store/apps/details?id=com.rovio.baba" },
+                    { name: "Temple Run 2", description: "An endless runner game where you escape from a monster.", download: "https://play.google.com/store/apps/details?id=com.imangi.templerun2" },
+                    { name: "Hill Climb Racing", description: "A physics-based driving game with challenging terrain.", download: "https://play.google.com/store/apps/details?id=com.fingersoft.hillclimb" },
+                    { name: "Shadow Fight 2", description: "A fighting game with RPG elements and shadowy visuals.", download: "https://play.google.com/store/apps/details?id=com.nekki.shadowfight" },
+                    { name: "Shadow Fight 3", description: "A 3D fighting game with deep customization and combat.", download: "https://play.google.com/store/apps/details?id=com.nekki.shadowfight3" },
+                    { name: "Marvel Contest of Champions", description: "A fighting game featuring Marvel superheroes and villains.", download: "https://play.google.com/store/apps/details?id=com.kabam.marvelbattle" },
+                    { name: "DC Legends: Battle for Justice", description: "A strategy RPG featuring DC superheroes and villains.", download: "https://play.google.com/store/apps/details?id=com.wb.goog.dc.universe.legends" },
+                    { name: "Star Wars: Galaxy of Heroes", description: "A strategy RPG featuring Star Wars characters.", download: "https://play.google.com/store/apps/details?id=com.ea.game.starwarscapital_row" },
+                    { name: "Harry Potter: Hogwarts Mystery", description: "An RPG where you attend Hogwarts and live out your wizarding story.", download: "https://play.google.com/store/apps/details?id=com.tinyco.potter" },
+                    { name: "The Sims Mobile", description: "A life simulation game where you create and control virtual people.", download: "https://play.google.com/store/apps/details?id=com.ea.gp.simsmobile" },
+                    { name: "SimCity BuildIt", description: "A city-building game where you create and manage your own city.", download: "https://play.google.com/store/apps/details?id=com.ea.game.simcitymobile_row" },
+                    { name: "Township", description: "A city-building game where you farm, mine, and trade.", download: "https://play.google.com/store/apps/details?id=com.playrix.township" },
+                    { name: "Hay Day", description: "A farming simulation game where you grow crops and raise animals.", download: "https://play.google.com/store/apps/details?id=com.supercell.hayday" },
+                    { name: "Cooking Fever", description: "A time management game where you run restaurants and cook dishes.", download: "https://play.google.com/store/apps/details?id=com.nordcurrent.canteenhd" },
+                    { name: "Cooking Mama: Let's Cook!", description: "A cooking simulation game with fun mini-games.", download: "https://play.google.com/store/apps/details?id=jp.co.ofcr.cm00" },
+                    { name: "My Talking Tom", description: "A virtual pet game where you take care of a cat.", download: "https://play.google.com/store/apps/details?id=com.outfit7.mytalkingtom" },
+                    { name: "My Talking Angela", description: "A virtual pet game where you take care of a cat.", download: "https://play.google.com/store/apps/details?id=com.outfit7.mytalkingangelafree" },
+                    { name: "Pou", description: "A virtual pet game where you take care of a cute alien.", download: "https://play.google.com/store/apps/details?id=me.pou.app" },
+                    { name: "Animal Crossing: Pocket Camp", description: "A life simulation game where you build and decorate a campsite.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaca" },
+                    { name: "Pokémon Masters EX", description: "A strategy RPG featuring Pokémon trainers and their Pokémon.", download: "https://play.google.com/store/apps/details?id=com.dena.a12026418" },
+                    { name: "Pokémon Unite", description: "A MOBA game featuring Pokémon in 5v5 battles.", download: "https://play.google.com/store/apps/details?id=jp.pokemon.pokemonunite" },
+                    { name: "Dragalia Lost", description: "An action RPG with co-op gameplay and a fantasy setting.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaga" },
+                    { name: "Fire Emblem Heroes", description: "A strategy RPG featuring characters from the Fire Emblem series.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaba" },
+                    { name: "Final Fantasy Brave Exvius", description: "A strategy RPG featuring characters from the Final Fantasy series.", download: "https://play.google.com/store/apps/details?id=com.square_enix.android_googleplay.FFBEWW" },
+                    { name: "Dragon Ball Legends", description: "A fighting game featuring characters from the Dragon Ball series.", download: "https://play.google.com/store/apps/details?id=com.bandainamcoent.dblegends_ww" },
+                    { name: "One Piece Bounty Rush", description: "A multiplayer action game featuring characters from One Piece.", download: "https://play.google.com/store/apps/details?id=com.bandainamcoent.opbrww" },
+                    { name: "Naruto X Boruto Ninja Voltage", description: "A strategy RPG featuring characters from Naruto and Boruto.", download: "https://play.google.com/store/apps/details?id=com.bandainamcoent.ninjavoltage" },
+                    { name: "Bleach: Brave Souls", description: "An action RPG featuring characters from the Bleach series.", download: "https://play.google.com/store/apps/details?id=com.klab.bleach" },
+                    { name: "Yu-Gi-Oh! Duel Links", description: "A digital card game featuring Yu-Gi-Oh! characters and cards.", download: "https://play.google.com/store/apps/details?id=com.konami.ygodl" },
+                    { name: "Fate/Grand Order", description: "A strategy RPG featuring characters from the Fate series.", download: "https://play.google.com/store/apps/details?id=com.aniplex.fategrandorder.en" },
+                    { name: "Azur Lane", description: "A strategy RPG with shipgirls and naval combat.", download: "https://play.google.com/store/apps/details?id=com.YoStarJP.AzurLane" },
+                    { name: "Arknights", description: "A tower defense RPG with anime-style graphics and deep strategy.", download: "https://play.google.com/store/apps/details?id=com.YoStarEN.Arknights" },
+                    { name: "Girls' Frontline", description: "A strategy RPG with tactical combat and anime-style characters.", download: "https://play.google.com/store/apps/details?id=com.sunborn.girlsfrontline.en" },
+                    { name: "Honkai Impact 3rd", description: "An action RPG with anime-style graphics and fast-paced combat.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.honkaiimpact3" },
+                    { name: "Genshin Impact", description: "An open-world action RPG with stunning visuals and elemental combat.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.GenshinImpact" },
+                    { name: "Honkai: Star Rail", description: "A turn-based RPG set in a sci-fi universe with stunning visuals.", download: "https://play.google.com/store/apps/details?id=com.HoYoverse.hkrpgoversea" },
+                    { name: "AFK Arena", description: "A casual RPG where you collect heroes and battle in idle gameplay.", download: "https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp" },
+                    { name: "Raid: Shadow Legends", description: "A fantasy RPG with turn-based combat and hero collection.", download: "https://play.google.com/store/apps/details?id=com.plarium.raidlegends" },
+                    { name: "Summoners War", description: "A strategy RPG with monster collection and turn-based combat.", download: "https://play.google.com/store/apps/details?id=com.com2us.smon.normal.freefull.google.kr.android.common" },
+                    { name: "Epic Seven", description: "A turn-based RPG with anime-style graphics and deep storytelling.", download: "https://play.google.com/store/apps/details?id=com.stove.epic7.google" },
+                    { name: "Seven Deadly Sins: Grand Cross", description: "A strategy RPG featuring characters from the Seven Deadly Sins anime.", download: "https://play.google.com/store/apps/details?id=com.netmarble.nanagb" },
+                    { name: "Black Desert Mobile", description: "An MMORPG with stunning graphics and open-world exploration.", download: "https://play.google.com/store/apps/details?id=com.pearlabyss.blackdesertm" },
+                    { name: "Lineage 2: Revolution", description: "An MMORPG with large-scale battles and stunning visuals.", download: "https://play.google.com/store/apps/details?id=com.netmarble.lin2ws" },
+                    { name: "EVE Echoes", description: "A space exploration MMORPG set in the EVE Online universe.", download: "https://play.google.com/store/apps/details?id=com.netease.eve.en" },
+                    { name: "Old School RuneScape", description: "A mobile version of the classic MMORPG RuneScape.", download: "https://play.google.com/store/apps/details?id=com.jagex.runescape.android" },
+                    { name: "Albion Online", description: "A sandbox MMORPG with player-driven economy and PvP.", download: "https://play.google.com/store/apps/details?id=com.albiononline" },
+                    { name: "Villagers & Heroes", description: "An MMORPG with crafting, quests, and open-world exploration.", download: "https://play.google.com/store/apps/details?id=com.madottergames.villagers" },
+                    { name: "Toram Online", description: "An MMORPG with deep customization and open-world exploration.", download: "https://play.google.com/store/apps/details?id=com.asobimo.toramonline" },
+                    { name: "AdventureQuest 3D", description: "An MMORPG with cross-platform play and a fantasy setting.", download: "https://play.google.com/store/apps/details?id=com.battleon.aq3d" },
+                    { name: "Sky: Children of the Light", description: "A social adventure game with stunning visuals and emotional storytelling.", download: "https://play.google.com/store/apps/details?id=com.tgc.sky.android" },
+                    { name: "Grimvalor", description: "An action-platformer with challenging combat and exploration.", download: "https://play.google.com/store/apps/details?id=com.direlight.grimvalor" },
+                    { name: "Dead Cells", description: "A rogue-like Metroidvania with fast-paced combat and procedurally generated levels.", download: "https://play.google.com/store/apps/details?id=com.playdigious.deadcells" },
+                    { name: "Hyper Light Drifter", description: "An action RPG with pixel art and challenging gameplay.", download: "https://play.google.com/store/apps/details?id=com.abylight.hld" },
+                    { name: "Oceanhorn", description: "An action-adventure game inspired by The Legend of Zelda series.", download: "https://play.google.com/store/apps/details?id=com.FDGEntertainment.Oceanhorn.gp" },
+                    { name: "Evoland 2", description: "An action RPG that evolves through different gaming eras.", download: "https://play.google.com/store/apps/details?id=com.playdigious.evoland2" },
+                    { name: "The Room: Old Sins", description: "A puzzle game with intricate mechanics and a mysterious story.", download: "https://play.google.com/store/apps/details?id=com.FireproofStudios.TheRoom4" },
+                    { name: "Monument Valley 2", description: "A puzzle game with stunning visuals and mind-bending mechanics.", download: "https://play.google.com/store/apps/details?id=com.ustwo.monumentvalley2" },
+                    { name: "Alto's Odyssey", description: "An endless runner game with beautiful visuals and relaxing gameplay.", download: "https://play.google.com/store/apps/details?id=com.noodlecake.altosodyssey" },
+                    { name: "Alto's Adventure", description: "An endless runner game with stunning visuals and relaxing gameplay.", download: "https://play.google.com/store/apps/details?id=com.noodlecake.altosadventure" },
+                    { name: "Limbo", description: "A puzzle-platformer with a dark and atmospheric setting.", download: "https://play.google.com/store/apps/details?id=com.playdead.limbo.full" },
+                    { name: "Inside", description: "A puzzle-platformer with a haunting atmosphere and gripping story.", download: "https://play.google.com/store/apps/details?id=com.playdead.inside" },
+                    { name: "Stardew Valley", description: "A farming simulation game where you build and manage your dream farm.", download: "https://play.google.com/store/apps/details?id=com.chucklefish.stardewvalley" },
+                    { name: "Terraria", description: "A sandbox adventure game with exploration, crafting, and combat.", download: "https://play.google.com/store/apps/details?id=com.and.games505.TerrariaPaid" },
+                    { name: "Don't Starve: Pocket Edition", description: "A survival game with a unique art style and challenging gameplay.", download: "https://play.google.com/store/apps/details?id=com.kleientertainment.doNotStarvePocket" },
+                    { name: "Crashlands", description: "A crafting RPG with humor and exploration.", download: "https://play.google.com/store/apps/details?id=com.bscotch.crashlands" },
+                    { name: "Minecraft", description: "A sandbox game where you can build and explore infinite worlds.", download: "https://play.google.com/store/apps/details?id=com.mojang.minecraftpe" },
+                    { name: "Roblox", description: "A platform where you can play and create games in a virtual world.", download: "https://play.google.com/store/apps/details?id=com.roblox.client" },
+                    { name: "Among Us", description: "A multiplayer party game of teamwork and betrayal.", download: "https://play.google.com/store/apps/details?id=com.innersloth.spacemafia" },
+                    { name: "Brawl Stars", description: "A fast-paced multiplayer game with various game modes.", download: "https://play.google.com/store/apps/details?id=com.supercell.brawlstars" },
+                    { name: "Clash Royale", description: "A real-time multiplayer game combining card strategy and tower defense.", download: "https://play.google.com/store/apps/details?id=com.supercell.clashroyale" },
+                    { name: "Clash of Clans", description: "A strategy game where you build villages and battle other players.", download: "https://play.google.com/store/apps/details?id=com.supercell.clashofclans" },
+                    { name: "PUBG Mobile", description: "A battle royale game where 100 players fight to be the last one standing.", download: "https://play.google.com/store/apps/details?id=com.tencent.ig" },
+                    { name: "Call of Duty: Mobile", description: "A first-person shooter with multiplayer modes and battle royale.", download: "https://play.google.com/store/apps/details?id=com.activision.callofduty.shooter" },
+                    { name: "Genshin Impact", description: "An open-world action RPG with stunning visuals and elemental combat.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.GenshinImpact" },
+                    { name: "Mobile Legends: Bang Bang", description: "A popular MOBA game with fast-paced 5v5 battles.", download: "https://play.google.com/store/apps/details?id=com.mobile.legends" },
+                    { name: "Free Fire", description: "A battle royale game with fast-paced matches and survival gameplay.", download: "https://play.google.com/store/apps/details?id=com.dts.freefireth" },
+                    { name: "Apex Legends Mobile", description: "A mobile version of the popular battle royale game Apex Legends.", download: "https://play.google.com/store/apps/details?id=com.ea.gp.apexlegendsmobilefps" },
+                    { name: "League of Legends: Wild Rift", description: "A mobile version of the popular MOBA game League of Legends.", download: "https://play.google.com/store/apps/details?id=com.riotgames.league.wildrift" },
+                    { name: "Pokémon GO", description: "An augmented reality game where you catch Pokémon in the real world.", download: "https://play.google.com/store/apps/details?id=com.nianticlabs.pokemongo" },
+                    { name: "Pokémon Unite", description: "A MOBA game featuring Pokémon in 5v5 battles.", download: "https://play.google.com/store/apps/details?id=jp.pokemon.pokemonunite" },
+                    { name: "Pokémon Masters EX", description: "A strategy RPG featuring Pokémon trainers and their Pokémon.", download: "https://play.google.com/store/apps/details?id=com.dena.a12026418" },
+                    { name: "Animal Crossing: Pocket Camp", description: "A life simulation game where you build and decorate a campsite.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaca" },
+                    { name: "Mario Kart Tour", description: "A racing game featuring Mario Kart characters and tracks.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaka" },
+                    { name: "Super Mario Run", description: "A platformer where you control Mario in endless running levels.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zara" },
+                    { name: "Fire Emblem Heroes", description: "A strategy RPG featuring characters from the Fire Emblem series.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaba" },
+                    { name: "Dragalia Lost", description: "An action RPG with co-op gameplay and a fantasy setting.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaga" },
+                    { name: "Final Fantasy Brave Exvius", description: "A strategy RPG featuring characters from the Final Fantasy series.", download: "https://play.google.com/store/apps/details?id=com.square_enix.android_googleplay.FFBEWW" },
+                    { name: "Dragon Ball Legends", description: "A fighting game featuring characters from the Dragon Ball series.", download: "https://play.google.com/store/apps/details?id=com.bandainamcoent.dblegends_ww" },
+                    { name: "One Piece Bounty Rush", description: "A multiplayer action game featuring characters from One Piece.", download: "https://play.google.com/store/apps/details?id=com.bandainamcoent.opbrww" },
+                    { name: "Naruto X Boruto Ninja Voltage", description: "A strategy RPG featuring characters from Naruto and Boruto.", download: "https://play.google.com/store/apps/details?id=com.bandainamcoent.ninjavoltage" },
+                    { name: "Bleach: Brave Souls", description: "An action RPG featuring characters from the Bleach series.", download: "https://play.google.com/store/apps/details?id=com.klab.bleach" },
+                    { name: "Yu-Gi-Oh! Duel Links", description: "A digital card game featuring Yu-Gi-Oh! characters and cards.", download: "https://play.google.com/store/apps/details?id=com.konami.ygodl" },
+                    { name: "Fate/Grand Order", description: "A strategy RPG featuring characters from the Fate series.", download: "https://play.google.com/store/apps/details?id=com.aniplex.fategrandorder.en" },
+                    { name: "Azur Lane", description: "A strategy RPG with shipgirls and naval combat.", download: "https://play.google.com/store/apps/details?id=com.YoStarJP.AzurLane" },
+                    { name: "Arknights", description: "A tower defense RPG with anime-style graphics and deep strategy.", download: "https://play.google.com/store/apps/details?id=com.YoStarEN.Arknights" },
+                    { name: "Girls' Frontline", description: "A strategy RPG with tactical combat and anime-style characters.", download: "https://play.google.com/store/apps/details?id=com.sunborn.girlsfrontline.en" },
+                    { name: "Honkai Impact 3rd", description: "An action RPG with anime-style graphics and fast-paced combat.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.honkaiimpact3" },
+                    { name: "Genshin Impact", description: "An open-world action RPG with stunning visuals and elemental combat.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.GenshinImpact" },
+                    { name: "Honkai: Star Rail", description: "A turn-based RPG set in a sci-fi universe with stunning visuals.", download: "https://play.google.com/store/apps/details?id=com.HoYoverse.hkrpgoversea" },
+                    { name: "AFK Arena", description: "A casual RPG where you collect heroes and battle in idle gameplay.", download: "https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp" },
+                    { name: "Raid: Shadow Legends", description: "A fantasy RPG with turn-based combat and hero collection.", download: "https://play.google.com/store/apps/details?id=com.plarium.raidlegends" },
+                    { name: "Summoners War", description: "A strategy RPG with monster collection and turn-based combat.", download: "https://play.google.com/store/apps/details?id=com.com2us.smon.normal.freefull.google.kr.android.common" },
+                    { name: "Epic Seven", description: "A turn-based RPG with anime-style graphics and deep storytelling.", download: "https://play.google.com/store/apps/details?id=com.stove.epic7.google" },
+                    { name: "Seven Deadly Sins: Grand Cross", description: "A strategy RPG featuring characters from the Seven Deadly Sins anime.", download: "https://play.google.com/store/apps/details?id=com.netmarble.nanagb" },
+                    { name: "Black Desert Mobile", description: "An MMORPG with stunning graphics and open-world exploration.", download: "https://play.google.com/store/apps/details?id=com.pearlabyss.blackdesertm" },
+                    { name: "Lineage 2: Revolution", description: "An MMORPG with large-scale battles and stunning visuals.", download: "https://play.google.com/store/apps/details?id=com.netmarble.lin2ws" },
+                    { name: "EVE Echoes", description: "A space exploration MMORPG set in the EVE Online universe.", download: "https://play.google.com/store/apps/details?id=com.netease.eve.en" },
+                    { name: "Old School RuneScape", description: "A mobile version of the classic MMORPG RuneScape.", download: "https://play.google.com/store/apps/details?id=com.jagex.runescape.android" },
+                    { name: "Albion Online", description: "A sandbox MMORPG with player-driven economy and PvP.", download: "https://play.google.com/store/apps/details?id=com.albiononline" },
+                    { name: "Villagers & Heroes", description: "An MMORPG with crafting, quests, and open-world exploration.", download: "https://play.google.com/store/apps/details?id=com.madottergames.villagers" },
+                    { name: "Toram Online", description: "An MMORPG with deep customization and open-world exploration.", download: "https://play.google.com/store/apps/details?id=com.asobimo.toramonline" },
+                    { name: "AdventureQuest 3D", description: "An MMORPG with cross-platform play and a fantasy setting.", download: "https://play.google.com/store/apps/details?id=com.battleon.aq3d" },
+                    { name: "Sky: Children of the Light", description: "A social adventure game with stunning visuals and emotional storytelling.", download: "https://play.google.com/store/apps/details?id=com.tgc.sky.android" },
+                    { name: "Grimvalor", description: "An action-platformer with challenging combat and exploration.", download: "https://play.google.com/store/apps/details?id=com.direlight.grimvalor" },
+                    { name: "Dead Cells", description: "A rogue-like Metroidvania with fast-paced combat and procedurally generated levels.", download: "https://play.google.com/store/apps/details?id=com.playdigious.deadcells" },
+                    { name: "Hyper Light Drifter", description: "An action RPG with pixel art and challenging gameplay.", download: "https://play.google.com/store/apps/details?id=com.abylight.hld" },
+                    { name: "Oceanhorn", description: "An action-adventure game inspired by The Legend of Zelda series.", download: "https://play.google.com/store/apps/details?id=com.FDGEntertainment.Oceanhorn.gp" },
+                    { name: "Evoland 2", description: "An action RPG that evolves through different gaming eras.", download: "https://play.google.com/store/apps/details?id=com.playdigious.evoland2" },
+                    { name: "The Room: Old Sins", description: "A puzzle game with intricate mechanics and a mysterious story.", download: "https://play.google.com/store/apps/details?id=com.FireproofStudios.TheRoom4" },
+                    { name: "Monument Valley 2", description: "A puzzle game with stunning visuals and mind-bending mechanics.", download: "https://play.google.com/store/apps/details?id=com.ustwo.monumentvalley2" },
+                    { name: "Alto's Odyssey", description: "An endless runner game with beautiful visuals and relaxing gameplay.", download: "https://play.google.com/store/apps/details?id=com.noodlecake.altosodyssey" },
+                    { name: "Alto's Adventure", description: "An endless runner game with stunning visuals and relaxing gameplay.", download: "https://play.google.com/store/apps/details?id=com.noodlecake.altosadventure" },
+                    { name: "Limbo", description: "A puzzle-platformer with a dark and atmospheric setting.", download: "https://play.google.com/store/apps/details?id=com.playdead.limbo.full" },
+                    { name: "Inside", description: "A puzzle-platformer with a haunting atmosphere and gripping story.", download: "https://play.google.com/store/apps/details?id=com.playdead.inside" },
+                    { name: "Stardew Valley", description: "A farming simulation game where you build and manage your dream farm.", download: "https://play.google.com/store/apps/details?id=com.chucklefish.stardewvalley" },
+                    { name: "Terraria", description: "A sandbox adventure game with exploration, crafting, and combat.", download: "https://play.google.com/store/apps/details?id=com.and.games505.TerrariaPaid" },
+                    { name: "Don't Starve: Pocket Edition", description: "A survival game with a unique art style and challenging gameplay.", download: "https://play.google.com/store/apps/details?id=com.kleientertainment.doNotStarvePocket" },
+                    { name: "Crashlands", description: "A crafting RPG with humor and exploration.", download: "https://play.google.com/store/apps/details?id=com.bscotch.crashlands" },
+                    { name: "Minecraft", description: "A sandbox game where you can build and explore infinite worlds.", download: "https://play.google.com/store/apps/details?id=com.mojang.minecraftpe" },
+                    { name: "Roblox", description: "A platform where you can play and create games in a virtual world.", download: "https://play.google.com/store/apps/details?id=com.roblox.client" },
+                    { name: "Among Us", description: "A multiplayer party game of teamwork and betrayal.", download: "https://play.google.com/store/apps/details?id=com.innersloth.spacemafia" },
+                    { name: "Brawl Stars", description: "A fast-paced multiplayer game with various game modes.", download: "https://play.google.com/store/apps/details?id=com.supercell.brawlstars" },
+                    { name: "Clash Royale", description: "A real-time multiplayer game combining card strategy and tower defense.", download: "https://play.google.com/store/apps/details?id=com.supercell.clashroyale" },
+                    { name: "Clash of Clans", description: "A strategy game where you build villages and battle other players.", download: "https://play.google.com/store/apps/details?id=com.supercell.clashofclans" },
+                    { name: "PUBG Mobile", description: "A battle royale game where 100 players fight to be the last one standing.", download: "https://play.google.com/store/apps/details?id=com.tencent.ig" },
+                    { name: "Call of Duty: Mobile", description: "A first-person shooter with multiplayer modes and battle royale.", download: "https://play.google.com/store/apps/details?id=com.activision.callofduty.shooter" },
+                    { name: "Genshin Impact", description: "An open-world action RPG with stunning visuals and elemental combat.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.GenshinImpact" },
+                    { name: "Mobile Legends: Bang Bang", description: "A popular MOBA game with fast-paced 5v5 battles.", download: "https://play.google.com/store/apps/details?id=com.mobile.legends" },
+                    { name: "Free Fire", description: "A battle royale game with fast-paced matches and survival gameplay.", download: "https://play.google.com/store/apps/details?id=com.dts.freefireth" },
+                    { name: "Apex Legends Mobile", description: "A mobile version of the popular battle royale game Apex Legends.", download: "https://play.google.com/store/apps/details?id=com.ea.gp.apexlegendsmobilefps" },
+                    { name: "League of Legends: Wild Rift", description: "A mobile version of the popular MOBA game League of Legends.", download: "https://play.google.com/store/apps/details?id=com.riotgames.league.wildrift" },
+                    { name: "Pokémon GO", description: "An augmented reality game where you catch Pokémon in the real world.", download: "https://play.google.com/store/apps/details?id=com.nianticlabs.pokemongo" },
+                    { name: "Pokémon Unite", description: "A MOBA game featuring Pokémon in 5v5 battles.", download: "https://play.google.com/store/apps/details?id=jp.pokemon.pokemonunite" },
+                    { name: "Pokémon Masters EX", description: "A strategy RPG featuring Pokémon trainers and their Pokémon.", download: "https://play.google.com/store/apps/details?id=com.dena.a12026418" },
+                    { name: "Animal Crossing: Pocket Camp", description: "A life simulation game where you build and decorate a campsite.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaca" },
+                    { name: "Mario Kart Tour", description: "A racing game featuring Mario Kart characters and tracks.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaka" },
+                    { name: "Super Mario Run", description: "A platformer where you control Mario in endless running levels.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zara" },
+                    { name: "Fire Emblem Heroes", description: "A strategy RPG featuring characters from the Fire Emblem series.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaba" },
+                    { name: "Dragalia Lost", description: "An action RPG with co-op gameplay and a fantasy setting.", download: "https://play.google.com/store/apps/details?id=com.nintendo.zaga" },
+                    { name: "Final Fantasy Brave Exvius", description: "A strategy RPG featuring characters from the Final Fantasy series.", download: "https://play.google.com/store/apps/details?id=com.square_enix.android_googleplay.FFBEWW" },
+                    { name: "Dragon Ball Legends", description: "A fighting game featuring characters from the Dragon Ball series.", download: "https://play.google.com/store/apps/details?id=com.bandainamcoent.dblegends_ww" },
+                    { name: "One Piece Bounty Rush", description: "A multiplayer action game featuring characters from One Piece.", download: "https://play.google.com/store/apps/details?id=com.bandainamcoent.opbrww" },
+                    { name: "Naruto X Boruto Ninja Voltage", description: "A strategy RPG featuring characters from Naruto and Boruto.", download: "https://play.google.com/store/apps/details?id=com.bandainamcoent.ninjavoltage" },
+                    { name: "Bleach: Brave Souls", description: "An action RPG featuring characters from the Bleach series.", download: "https://play.google.com/store/apps/details?id=com.klab.bleach" },
+                    { name: "Yu-Gi-Oh! Duel Links", description: "A digital card game featuring Yu-Gi-Oh! characters and cards.", download: "https://play.google.com/store/apps/details?id=com.konami.ygodl" },
+                    { name: "Fate/Grand Order", description: "A strategy RPG featuring characters from the Fate series.", download: "https://play.google.com/store/apps/details?id=com.aniplex.fategrandorder.en" },
+                    { name: "Azur Lane", description: "A strategy RPG with shipgirls and naval combat.", download: "https://play.google.com/store/apps/details?id=com.YoStarJP.AzurLane" },
+                    { name: "Arknights", description: "A tower defense RPG with anime-style graphics and deep strategy.", download: "https://play.google.com/store/apps/details?id=com.YoStarEN.Arknights" },
+                    { name: "Girls' Frontline", description: "A strategy RPG with tactical combat and anime-style characters.", download: "https://play.google.com/store/apps/details?id=com.sunborn.girlsfrontline.en" },
+                    { name: "Honkai Impact 3rd", description: "An action RPG with anime-style graphics and fast-paced combat.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.honkaiimpact3" },
+                    { name: "Genshin Impact", description: "An open-world action RPG with stunning visuals and elemental combat.", download: "https://play.google.com/store/apps/details?id=com.miHoYo.GenshinImpact" },
+                    { name: "Honkai: Star Rail", description: "A turn-based RPG set in a sci-fi universe with stunning visuals.", download: "https://play.google.com/store/apps/details?id=com.HoYoverse.hkrpgoversea" },
+                    { name: "AFK Arena", description: "A casual RPG where you collect heroes and battle in idle gameplay.", download: "https://play.google.com/store/apps/details?id=com.lilithgame.hgame.gp" },
+                    { name: "Raid: Shadow Legends", description: "A fantasy RPG with turn-based combat and hero collection.", download: "https://play.google.com/store/apps/details?id=com.plarium.raidlegends" },
+                    { name: "Summoners War", description: "A strategy RPG with monster collection and turn-based combat.", download: "https://play.google.com/store/apps/details?id=com.com2us.smon.normal.freefull.google.kr.android.common" },
+                    { name: "Epic Seven", description: "A turn-based RPG with anime-style graphics and deep storytelling.", download: "https://play.google.com/store/apps/details?id=com.stove.epic7.google" },
+                    { name: "Seven Deadly Sins: Grand Cross", description: "A strategy RPG featuring characters from the Seven Deadly Sins anime.", download: "https://play.google.com/store/apps/details?id=com.netmarble.nanagb" },
+                    { name: "Black Desert Mobile", description: "An MMORPG with stunning graphics and open-world exploration.", download: "https://play.google.com/store/apps/details?id=com.pearlabyss.blackdesertm" },
+                    { name: "Lineage 2: Revolution", description: "An MMORPG with large-scale battles and stunning visuals.", download: "https://play.google.com/store/apps/details?id=com.netmarble.lin2ws" },
+                    { name: "EVE Echoes", description: "A space exploration MMORPG set in the EVE Online universe.", download: "https://play.google.com/store/apps/details?id=com.netease.eve.en" },
+                    { name: "Old School RuneScape", description: "A mobile version of the classic MMORPG RuneScape.", download: "https://play.google.com/store/apps/details?id=com.jagex.runescape.android" },
+                    { name: "Albion Online", description: "A sandbox MMORPG with player-driven economy and PvP.", download: "https://play.google.com/store/apps/details?id=com.albiononline" },
+                    { name: "Villagers & Heroes", description: "An MMORPG with crafting, quests, and open-world exploration.", download: "https://play.google.com/store/apps/details?id=com.madottergames.villagers" },
+                    { name: "Toram Online", description: "An MMORPG with deep customization and open-world exploration.", download: "https://play.google.com/store/apps/details?id=com.asobimo.toramonline" },
+                    { name: "AdventureQuest 3D", description: "An MMORPG with cross-platform play and a fantasy setting.", download: "https://play.google.com/store/apps/details?id=com.battleon.aq3d" },
+                    { name: "Sky: Children of the Light", description: "A social adventure game with stunning visuals and emotional storytelling.", download: "https://play.google.com/store/apps/details?id=com.tgc.sky.android" },
+                    { name: "Grimvalor", description: "An action-platformer with challenging combat and exploration.", download: "https://play.google.com/store/apps/details?id=com.direlight.grimvalor" },
+                    { name: "Dead Cells", description: "A rogue-like Metroidvania with fast-paced combat and procedurally generated levels.", download: "https://play.google.com/store/apps/details?id=com.playdigious.deadcells" },
+                    { name: "Hyper Light Drifter", description: "An action RPG with pixel art and challenging gameplay.", download: "https://play.google.com/store/apps/details?id=com.abylight.hld" },
+                    { name: "Oceanhorn", description: "An action-adventure game inspired by The Legend of Zelda series.", download: "https://play.google.com/store/apps/details?id=com.FDGEntertainment.Oceanhorn.gp" },
+                    { name: "Evoland 2", description: "An action RPG that evolves through different gaming eras.", download: "https://play.google.com/store/apps/details?id=com.playdigious.evoland2" },
+                    { name: "The Room: Old Sins", description: "A puzzle game with intricate mechanics and a mysterious story.", download: "https://play.google.com/store/apps/details?id=com.FireproofStudios.TheRoom4" },
+                    { name: "Monument Valley 2", description: "A puzzle game with stunning visuals and mind-bending mechanics.", download: "https://play.google.com/store/apps/details?id=com.ustwo.monumentvalley2" },
+                    { name: "Alto's Odyssey", description: "An endless runner game with beautiful visuals and relaxing gameplay.", download: "https://play.google.com/store/apps/details?id=com.noodlecake.altosodyssey" },
+                    { name: "Alto's Adventure", description: "An endless runner game with stunning visuals and relaxing gameplay.", download: "https://play.google.com/store/apps/details?id=com.noodlecake.altosadventure" },
+                    { name: "Limbo", description: "A puzzle-platformer with a dark and atmospheric setting.", download: "https://play.google.com/store/apps/details?id=com.playdead.limbo.full" },
+                    { name: "Inside", description: "A puzzle-platformer with a haunting atmosphere and gripping story.", download: "https://play.google.com/store/apps/details?id=com.playdead.inside" },
+                    { name: "Stardew Valley", description: "A farming simulation game where you build and manage your dream farm.", download: "https://play.google.com/store/apps/details?id=com.chucklefish.stardewvalley" },
+                    { name: "Terraria", description: "A sandbox adventure game with exploration, crafting, and combat.", download: "https://play.google.com/store/apps/details?id=com.and.games505.TerrariaPaid" },
+                    { name: "Don't Starve: Pocket Edition", description: "A survival game with a unique art style and challenging gameplay.", download: "https://play.google.com/store/apps/details?id=com.kleientertainment.doNotStarvePocket" },
+                    { name: "Crashlands", description: "A crafting RPG with humor and exploration.", download: "https://play.google.com/store/apps/details?id=com.bscotch.crashlands" },
+                    { name: "Minecraft", description: "A sandbox game where you can build and explore infinite worlds.", download: "https://play.google.com/store/apps/details?id=com.mojang.minecraftpe" },
+                    { name: "Roblox", description: "A platform where you can play and create games in a virtual world.", download: "https://play.google.com/store/apps/details?id=com.roblox.client" },
+                    { name: "Among Us", description: "A multiplayer party game of teamwork and betrayal.", download: "https://play.google.com/store/apps/details?id=com.innersloth.spacemafia" },
+                    { name: "Brawl Stars", description: "A fast-paced multiplayer game with various game modes.", download: "https://play.google.com/store/apps/details?id=com.supercell.brawlstars" },
+                    { name: "Clash Royale", description: "A real-time multiplayer game combining card strategy and tower defense.", download: "https://play.google.com/store/apps/details?id=com.supercell.clashroyale" },
+                    { name: "Clash of Clans", description: "A strategy game where you build villages and battle other players.", download: "https://play.google.com/store/apps/details?id=com.supercell.clashofclans" },
+                    { name: "Brawl Stars", description: "A multiplayer brawler game featuring different modes and characters.", download: "https://play.google.com/store/apps/details?id=com.supercell.brawlstars" }
+                ];
+
+                gameData.forEach(game => {
+                    const gameItem = document.createElement('div');
+                    gameItem.className = 'game-item';
+                    gameItem.innerHTML = `<h2>${game.name}</h2><p>${game.description}</p><a href="${game.download}" class="download-btn" target="_blank">Download</a>`;
+                    document.getElementById('gameList').appendChild(gameItem);
+                });
+
+                function searchGames() {
+                    let input = document.getElementById('searchInput').value.toLowerCase();
+                    let gameItems = document.querySelectorAll('.game-item');
+                    gameItems.forEach(item => {
+                        let title = item.querySelector('h2').textContent.toLowerCase();
+                        item.style.display = title.includes(input) ? 'block' : 'none';
+                    });
+                }
+            </script>
+        </div>
+    </div>
+</body>
+
+</html>

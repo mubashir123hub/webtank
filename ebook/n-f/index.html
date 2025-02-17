@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Non-Fiction E-Books - WEBTANK</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+            color: #fff;
+            overflow-x: hidden;
+            text-align: center;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+        }
+        ::-webkit-scrollbar {
+    width: 15px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(6, 241, 65, 0.1);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, #00ffcc, #007bff);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(90deg, #007bff, #00ffcc);
+}
+html {
+    scroll-behavior:inherit ;
+}
+        ::selection {
+    background: linear-gradient(90deg, #00ffcc, #ff00f2);
+    color: #7006c7f5;
+    text-shadow: 0 0 13px rgba(4, 96, 182, 0.952);
+}
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            background: linear-gradient(90deg, #00ffcc, #007bff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .search-bar {
+            width: 70%;
+            padding: 10px;
+            margin: 20px 0;
+            border: 2px solid #00ffcc;
+            border-radius: 30px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            outline: none;
+        }
+
+        .book-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .book-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            transition: transform 0.3s;
+        }
+
+        .book-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(90deg, #00ffcc, #007bff);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Non-Fiction E-Books</h1>
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search books..." onkeyup="searchBooks()">
+        <div class="book-list" id="bookList">
+            <script>
+                const bookData = [
+                    { name: "Sapiens: A Brief History of Humankind", download: "https://example.com/sapiens.pdf" },
+                    { name: "The Power of Habit", download: "https://example.com/power-of-habit.pdf" },
+                    { name: "Atomic Habits", download: "https://example.com/atomic-habits.pdf" },
+                    { name: "Thinking, Fast and Slow", download: "https://example.com/thinking-fast-slow.pdf" },
+                    { name: "Quiet: The Power of Introverts", download: "https://example.com/quiet-introverts.pdf" },
+                    { name: "Educated", download: "https://example.com/educated.pdf" },
+                    { name: "The Subtle Art of Not Giving a F*ck", download: "https://example.com/subtle-art.pdf" },
+                    { name: "The 48 Laws of Power", download: "https://example.com/48-laws-power.pdf" },
+                    { name: "Outliers: The Story of Success", download: "https://example.com/outliers.pdf" },
+                    { name: "Man’s Search for Meaning", download: "https://example.com/mans-search-meaning.pdf" }
+                ];
+
+                for (let i = 11; i <= 500; i++) {
+                    bookData.push({
+                        name: `Non-Fiction E-Book ${i}`,
+                        download: "#"
+                    });
+                }
+
+                bookData.forEach(book => {
+                    const bookItem = document.createElement('div');
+                    bookItem.className = 'book-item';
+                    bookItem.innerHTML = `<h2>${book.name}</h2><a href="${book.download}" class="download-btn" target="_blank">Download</a>`;
+                    document.getElementById('bookList').appendChild(bookItem);
+                });
+
+                function searchBooks() {
+                    let input = document.getElementById('searchInput').value.toLowerCase();
+                    let bookItems = document.querySelectorAll('.book-item');
+                    bookItems.forEach(item => {
+                        let title = item.querySelector('h2').textContent.toLowerCase();
+                        item.style.display = title.includes(input) ? 'block' : 'none';
+                    });
+                }
+            </script>
+        </div>
+    </div>
+</body>
+
+</html>
