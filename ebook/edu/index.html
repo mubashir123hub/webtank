@@ -107,6 +107,23 @@
 </head>
 
 <body>
+    <a style="        .logo {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }" href="index1.html">
+        <img src="logo.png" alt="WEBTANK Logo" class="logo" width="150">
+    </a>
     <div class="container">
         <h1>Educational E-Books</h1>
         <input type="text" id="searchInput" class="search-bar" placeholder="Search books..." onkeyup="searchBooks()">
