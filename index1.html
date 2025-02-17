@@ -10,32 +10,33 @@
 
         /* Custom Scrollbar */
         ::selection {
-    background: linear-gradient(90deg, #00ffcc, #ff00f2);
-    color: #7006c7f5;
-    text-shadow: 0 0 13px rgba(4, 96, 182, 0.952);
-}
+            background: linear-gradient(90deg, #00ffcc, #ff00f2);
+            color: #7006c7f5;
+            text-shadow: 0 0 13px rgba(4, 96, 182, 0.952);
+        }
 
-::-webkit-scrollbar {
-    width: 15px;
-}
+        ::-webkit-scrollbar {
+            width: 15px;
+        }
 
-::-webkit-scrollbar-track {
-    background: rgba(6, 241, 65, 0.1);
-    border-radius: 10px;
-}
+        ::-webkit-scrollbar-track {
+            background: rgba(6, 241, 65, 0.1);
+            border-radius: 10px;
+        }
 
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(90deg, #00ffcc, #007bff);
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
-}
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, #00ffcc, #007bff);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+        }
 
-::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(90deg, #007bff, #00ffcc);
-}
-html {
-    scroll-behavior:inherit ;
-}
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(90deg, #007bff, #00ffcc);
+        }
+
+        html {
+            scroll-behavior: inherit;
+        }
 
         body {
             font-family: 'Roboto', sans-serif;
@@ -77,7 +78,10 @@ html {
             }
         }
 
-        input[type="text"] {
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        textarea {
             width: 70%;
             padding: 15px;
             margin: 10px 0;
@@ -90,7 +94,10 @@ html {
             transition: border-color 0.3s;
         }
 
-        input[type="text"]:focus {
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="email"]:focus,
+        textarea:focus {
             border-color: #007bff;
         }
 
@@ -197,6 +204,125 @@ html {
         .hidden {
             display: none;
         }
+
+        /* Profile Section */
+        .profile {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .profile img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid #00ffcc;
+        }
+
+        .profile-options {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1000;
+        }
+
+        .profile-options button {
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+            background: transparent;
+            border: 1px solid #00ffcc;
+            color: #fff;
+        }
+
+        .profile-options button:hover {
+            background: rgba(0, 255, 204, 0.1);
+        }
+
+        /* Success Message */
+        .success-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 255, 204, 0.9);
+            color: #1e1e2f;
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+            animation: fadeOut 5s forwards;
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+                display: none;
+            }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            input[type="text"],
+            input[type="password"],
+            input[type="email"],
+            textarea {
+                width: 90%;
+            }
+
+            .profile {
+                top: 10px;
+                right: 10px;
+            }
+
+            .profile img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .profile-options {
+                top: 50px;
+            }
+        }
+          .section {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+         .section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #00ffcc;
+        }
+
+        .section p {
+            font-size: 1.1rem;
+            color: #ccc;
+        }
     </style>
 </head>
 
@@ -205,7 +331,37 @@ html {
         <img src="logo.png" alt="WEBTANK Logo" class="logo" width="150">
     </a>
 
-    <div class="container">
+    <!-- Profile Section -->
+    <div class="profile hidden" id="profileSection">
+        <img id="profilePicture" src="default-profile.png" alt="Profile Picture">
+        <div class="profile-options" id="profileOptions">
+            <button onclick="changeProfilePicture()">Change Profile Picture</button>
+            <button onclick="changeUsername()">Change Username</button>
+            <button onclick="changePassword()">Change Password</button>
+        </div>
+    </div>
+
+    <!-- Register Form -->
+    <div class="auth-container" id="registerForm">
+        <h2>Register</h2>
+        <input type="text" id="registerUsername" placeholder="Username">
+        <input type="email" id="registerEmail" placeholder="Email">
+        <input type="password" id="registerPassword" placeholder="Password">
+        <button onclick="register()">Register</button>
+        <p>Already have an account? <a href="#" onclick="toggleForms()">Login here</a></p>
+    </div>
+
+    <!-- Login Form -->
+    <div class="auth-container hidden" id="loginForm">
+        <h2>Login</h2>
+        <input type="text" id="loginUsername" placeholder="Username">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p>Don't have an account? <a href="#" onclick="toggleForms()">Register here</a></p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container hidden" id="mainContent">
         <h1>WEBTANK</h1>
         <input type="text" id="searchInput" placeholder="Search for software, games, etc...">
         <button onclick="performSearch()">Search</button>
@@ -217,7 +373,8 @@ html {
             <li><a href="movi/index.html">Movies</a></li>
             <li><a href="music/index.html">Music</a></li>
             <li><a href="news/index.html">News</a></li>
-            <li><a href="news/index.html">News</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
         </ul>
     </div>
 
@@ -231,7 +388,7 @@ html {
             <li><a href="software/dev/index.html">Development Tools</a></li>
         </ul>
     </div>
-
+    
     <div class="section" data-search="games">
         <h2>Games </h2>
         <p>Find the best games for different platforms.</p>
@@ -241,7 +398,7 @@ html {
             <li><a href="games/console/index.html">Console Games</a></li>
         </ul>
     </div>
-
+    
     <div class="section" data-search="movies music">
         <h2>Movies </h2>
         <p>Enjoy the latest movies and music collections.</p>
@@ -251,7 +408,7 @@ html {
             <li><a href="movi/stb/index.html">Soundtracks</a></li>
         </ul>
     </div>
-
+    
     <div class="section" data-search="ebooks books">
         <h2>E-books </h2>
         <p>Find a wide range of digital books.</p>
@@ -261,7 +418,7 @@ html {
             <li><a href="ebook/edu/index.html">Educational</a></li>
         </ul>
     </div>
-
+    
     <div class="section" data-search="news updates">
         <h2>News </h2>
         <p>Stay updated with the latest news.</p>
@@ -271,39 +428,194 @@ html {
             <li><a href="news/wn/index.html">World News</a></li>
         </ul>
     </div>
-
     <footer>
-        &copy; 2025 WEBTANK. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+        &copy; 2025 WEBTANK. All rights reserved. | Created by Mubashir Ali |
     </footer>
 
+    <!-- About Us Page -->
+    <div class="container hidden" id="aboutPage">
+        <h1>About Us</h1>
+        <p>Welcome to WEBTANK, your ultimate destination for software, games, e-books, movies, music, and news. We are
+            dedicated to providing you with the best digital content and a seamless user experience.</p>
+        <p>Our mission is to make high-quality digital content accessible to everyone. Whether you're looking for the
+            latest games, educational e-books, or trending movies, WEBTANK has you covered.</p>
+        <p>Thank you for choosing WEBTANK. We hope you enjoy your time here!</p>
+        <a href="index1.html" class="download-btn">Back to Home</a>
+    </div>
+
+    <!-- Contact Us Page -->
+    <div class="container hidden" id="contactPage">
+        <h1>Contact Us</h1>
+        <p>Have questions or feedback? We'd love to hear from you!</p>
+        <form id="contactForm">
+            <input type="text" id="contactName" placeholder="Your Name" required>
+            <input type="email" id="contactEmail" placeholder="Your Email" required>
+            <textarea id="contactMessage" placeholder="Your Message" rows="5" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+        <a href="index1.html" class="download-btn">Back to Home</a>
+    </div>
+
     <script>
-        function performSearch() {
-            const query = document.getElementById("searchInput").value.toLowerCase();
-            const sections = document.querySelectorAll(".section");
-
-            if (!query) {
-                alert("Please enter a search term.");
-                return;
-            }
-
-            sections.forEach(section => {
-                const searchableText = section.getAttribute("data-search").toLowerCase();
-                if (searchableText.includes(query)) {
-                    section.classList.remove("hidden");
-                } else {
-                    section.classList.add("hidden");
-                }
-            });
+        // Toggle between Register and Login forms
+        function toggleForms() {
+            const registerForm = document.getElementById('registerForm');
+            const loginForm = document.getElementById('loginForm');
+            registerForm.classList.toggle('hidden');
+            loginForm.classList.toggle('hidden');
         }
 
-        document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("searchInput").addEventListener("keypress", function (event) {
-                if (event.key === "Enter") {
-                    event.preventDefault();
-                    performSearch();
+        // Show success message
+        function showSuccessMessage(message) {
+            const successMessage = document.createElement('div');
+            successMessage.className = 'success-message';
+            successMessage.textContent = message;
+            document.body.appendChild(successMessage);
+            setTimeout(() => {
+                successMessage.remove();
+            }, 3000);
+        }
+
+        // Register Function
+        function register() {
+            const username = document.getElementById('registerUsername').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            if (username && email && password) {
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const userExists = users.some(user => user.username === username || user.email === email);
+
+                if (userExists) {
+                    showSuccessMessage('Username or email already exists.');
+                    return;
                 }
-            });
+
+                const newUser = { username, email, password, profilePicture: 'default-profile.png' };
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('currentUser', JSON.stringify(newUser));
+                showSuccessMessage('Registration successful!');
+                showHomePage();
+            } else {
+                showSuccessMessage('Please fill in all fields.');
+            }
+        }
+
+        // Login Function
+        function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(user => user.username === username && user.password === password);
+
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                showSuccessMessage('Login successful!');
+                showHomePage();
+            } else {
+                showSuccessMessage('Invalid username or password.');
+            }
+        }
+
+        // Show Home Page
+        function showHomePage() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (!user) return;
+
+            document.getElementById('mainContent').classList.remove('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('profileSection').classList.remove('hidden');
+            document.getElementById('aboutPage').classList.add('hidden');
+            document.getElementById('contactPage').classList.add('hidden');
+
+            document.getElementById('profilePicture').src = user.profilePicture || 'default-profile.png';
+        }
+
+        // Profile Options
+        document.getElementById('profilePicture').addEventListener('click', () => {
+            const options = document.getElementById('profileOptions');
+            options.style.display = options.style.display === 'block' ? 'none' : 'block';
         });
+
+        // Change Profile Picture
+        function changeProfilePicture() {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const users = JSON.parse(localStorage.getItem('users'));
+                    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                    const userIndex = users.findIndex(user => user.username === currentUser.username);
+
+                    users[userIndex].profilePicture = e.target.result;
+                    localStorage.setItem('users', JSON.stringify(users));
+                    localStorage.setItem('currentUser', JSON.stringify(users[userIndex]));
+                    document.getElementById('profilePicture').src = e.target.result;
+                    showSuccessMessage('Profile picture updated successfully!');
+                };
+                reader.readAsDataURL(file);
+            };
+            fileInput.click();
+        }
+
+        // Change Username
+        function changeUsername() {
+            const newUsername = prompt('Enter new username:');
+            if (newUsername) {
+                const users = JSON.parse(localStorage.getItem('users'));
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                const userIndex = users.findIndex(user => user.username === currentUser.username);
+
+                users[userIndex].username = newUsername;
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('currentUser', JSON.stringify(users[userIndex]));
+                showSuccessMessage('Username updated successfully!');
+            }
+        }
+
+        // Change Password
+        function changePassword() {
+            const newPassword = prompt('Enter new password:');
+            if (newPassword) {
+                const users = JSON.parse(localStorage.getItem('users'));
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                const userIndex = users.findIndex(user => user.username === currentUser.username);
+
+                users[userIndex].password = newPassword;
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('currentUser', JSON.stringify(users[userIndex]));
+                showSuccessMessage('Password updated successfully!');
+            }
+        }
+
+        // Handle Contact Form Submission
+        document.getElementById('contactForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const name = document.getElementById('contactName').value;
+            const email = document.getElementById('contactEmail').value;
+            const message = document.getElementById('contactMessage').value;
+
+            if (name && email && message) {
+                showSuccessMessage('Your message has been sent!');
+                document.getElementById('contactForm').reset();
+            } else {
+                showSuccessMessage('Please fill in all fields.');
+            }
+        });
+
+        // Check if user is already logged in
+        window.onload = function () {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                showHomePage();
+            }
+        };
     </script>
 </body>
 
