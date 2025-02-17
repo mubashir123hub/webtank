@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WEBTANK - Your Digital Universe</title>
-    <link rel="icon" type="image/png" href="logo.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
 
@@ -81,8 +80,7 @@
 
         input[type="text"],
         input[type="password"],
-        input[type="email"],
-        textarea {
+        input[type="email"] {
             width: 70%;
             padding: 15px;
             margin: 10px 0;
@@ -97,8 +95,7 @@
 
         input[type="text"]:focus,
         input[type="password"]:focus,
-        input[type="email"]:focus,
-        textarea:focus {
+        input[type="email"]:focus {
             border-color: #007bff;
         }
 
@@ -118,7 +115,27 @@
             transform: scale(1.05);
             box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
         }
+        .section {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
 
+        .section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #00ffcc;
+        }
+
+        .section p {
+            font-size: 1.1rem;
+            color: #ccc;
+        }
         ul {
             list-style: none;
             padding: 0;
@@ -259,7 +276,7 @@
             padding: 10px 20px;
             border-radius: 30px;
             box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
-            animation: fadeOut 5s forwards;
+            animation: fadeOut 3s forwards;
         }
 
         @keyframes fadeOut {
@@ -285,8 +302,7 @@
 
             input[type="text"],
             input[type="password"],
-            input[type="email"],
-            textarea {
+            input[type="email"] {
                 width: 90%;
             }
 
@@ -303,28 +319,6 @@
             .profile-options {
                 top: 50px;
             }
-        }
-
-        .section {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-        }
-
-        .section h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
-            margin-bottom: 15px;
-            color: #00ffcc;
-        }
-
-        .section p {
-            font-size: 1.1rem;
-            color: #ccc;
         }
     </style>
 </head>
@@ -371,7 +365,7 @@
             justify-content: center;
             z-index: 9999;
         }
-
+    
         /* Loading Bar */
         #loading-bar {
             width: 0%;
@@ -380,7 +374,7 @@
             box-shadow: 0 0 10px #00ffcc, 0 0 20px #007bff;
             transition: width 3.5s ease-in-out;
         }
-
+    
         /* Glowing Effect */
         #loading-glow {
             position: absolute;
@@ -393,7 +387,7 @@
             opacity: 0.8;
             animation: glow-move 3.5s ease-in-out;
         }
-
+    
         /* Loading Text */
         #loading-text {
             font-family: 'Orbitron', sans-serif;
@@ -402,23 +396,23 @@
             margin-top: 15px;
             animation: blink 1s infinite alternate;
         }
-
+    
         /* Keyframes */
         @keyframes glow-move {
             0% {
                 left: 0%;
             }
-
+    
             100% {
                 left: 100%;
             }
         }
-
+    
         @keyframes blink {
             0% {
                 opacity: 1;
             }
-
+    
             100% {
                 opacity: 0.5;
             }
@@ -444,7 +438,24 @@
         </div>
     </div>
 
+    <!-- Register Form -->
+    <div class="auth-container" id="registerForm">
+        <h2>Register</h2>
+        <input type="text" id="registerUsername" placeholder="Username">
+        <input type="email" id="registerEmail" placeholder="Email">
+        <input type="password" id="registerPassword" placeholder="Password">
+        <button onclick="register()">Register</button>
+        <p>Already have an account? <a href="#" onclick="toggleForms()">Login here</a></p>
+    </div>
 
+    <!-- Login Form -->
+    <div class="auth-container hidden" id="loginForm">
+        <h2>Login</h2>
+        <input type="text" id="loginUsername" placeholder="Username">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p>Don't have an account? <a href="#" onclick="toggleForms()">Register here</a></p>
+    </div>
 
     <!-- Main Content -->
     <div class="container hidden" id="mainContent">
@@ -459,11 +470,8 @@
             <li><a href="movi/index.html">Movies</a></li>
             <li><a href="music/index.html">Music</a></li>
             <li><a href="news/index.html">News</a></li>
-            <li><a href="about.html">About Us</a></li>
-            <li><a href="contact.html">Contact Us</a></li>
         </ul>
     </div>
-
     <div class="section" data-search="software">
         <h2>Software </h2>
         <p>Explore a variety of software applications.</p>
@@ -474,7 +482,7 @@
             <li><a href="software/dev/index.html">Development Tools</a></li>
         </ul>
     </div>
-
+    
     <div class="section" data-search="games">
         <h2>Games </h2>
         <p>Find the best games for different platforms.</p>
@@ -484,7 +492,7 @@
             <li><a href="games/console/index.html">Console Games</a></li>
         </ul>
     </div>
-
+    
     <div class="section" data-search="movies music">
         <h2>Movies </h2>
         <p>Enjoy the latest movies and music collections.</p>
@@ -494,7 +502,7 @@
             <li><a href="movi/stb/index.html">Soundtracks</a></li>
         </ul>
     </div>
-
+    
     <div class="section" data-search="ebooks books">
         <h2>E-books </h2>
         <p>Find a wide range of digital books.</p>
@@ -504,7 +512,7 @@
             <li><a href="ebook/edu/index.html">Educational</a></li>
         </ul>
     </div>
-
+    
     <div class="section" data-search="news updates">
         <h2>News </h2>
         <p>Stay updated with the latest news.</p>
@@ -514,33 +522,155 @@
             <li><a href="news/wn/index.html">World News</a></li>
         </ul>
     </div>
+
     <footer>
-        &copy; 2025 WEBTANK. All rights reserved. | Created by Mubashir Ali |
+        &copy; 2025 WEBTANK. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
     </footer>
 
-    <!-- About Us Page -->
-    <div class="container hidden" id="aboutPage">
-        <h1>About Us</h1>
-        <p>Welcome to WEBTANK, your ultimate destination for software, games, e-books, movies, music, and news. We are
-            dedicated to providing you with the best digital content and a seamless user experience.</p>
-        <p>Our mission is to make high-quality digital content accessible to everyone. Whether you're looking for the
-            latest games, educational e-books, or trending movies, WEBTANK has you covered.</p>
-        <p>Thank you for choosing WEBTANK. We hope you enjoy your time here!</p>
-        <a href="index1.html" class="download-btn">Back to Home</a>
-    </div>
+    <script>
+        // Toggle between Register and Login forms
+        function toggleForms() {
+            const registerForm = document.getElementById('registerForm');
+            const loginForm = document.getElementById('loginForm');
+            registerForm.classList.toggle('hidden');
+            loginForm.classList.toggle('hidden');
+        }
 
-    <!-- Contact Us Page -->
-    <div class="container hidden" id="contactPage">
-        <h1>Contact Us</h1>
-        <p>Have questions or feedback? We'd love to hear from you!</p>
-        <form id="contactForm">
-            <input type="text" id="contactName" placeholder="Your Name" required>
-            <input type="email" id="contactEmail" placeholder="Your Email" required>
-            <textarea id="contactMessage" placeholder="Your Message" rows="5" required></textarea>
-            <button type="submit">Send Message</button>
-        </form>
-        <a href="index1.html" class="download-btn">Back to Home</a>
-    </div>
+        // Show success message
+        function showSuccessMessage(message) {
+            const successMessage = document.createElement('div');
+            successMessage.className = 'success-message';
+            successMessage.textContent = message;
+            document.body.appendChild(successMessage);
+            setTimeout(() => {
+                successMessage.remove();
+            }, 3000);
+        }
+
+        // Register Function
+        function register() {
+            const username = document.getElementById('registerUsername').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            if (username && email && password) {
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const userExists = users.some(user => user.username === username || user.email === email);
+
+                if (userExists) {
+                    showSuccessMessage('Username or email already exists.');
+                    return;
+                }
+
+                const newUser = { username, email, password, profilePicture: 'default-profile.png' };
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('currentUser', JSON.stringify(newUser));
+                showSuccessMessage('Registration successful!');
+                showHomePage();
+            } else {
+                showSuccessMessage('Please fill in all fields.');
+            }
+        }
+
+        // Login Function
+        function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(user => user.username === username && user.password === password);
+
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                showSuccessMessage('Login successful!');
+                showHomePage();
+            } else {
+                showSuccessMessage('Invalid username or password.');
+            }
+        }
+
+        // Show Home Page
+        function showHomePage() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (!user) return;
+
+            document.getElementById('mainContent').classList.remove('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('profileSection').classList.remove('hidden');
+
+            document.getElementById('profilePicture').src = user.profilePicture || 'default-profile.png';
+        }
+
+        // Profile Options
+        document.getElementById('profilePicture').addEventListener('click', () => {
+            const options = document.getElementById('profileOptions');
+            options.style.display = options.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Change Profile Picture
+        function changeProfilePicture() {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const users = JSON.parse(localStorage.getItem('users'));
+                    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                    const userIndex = users.findIndex(user => user.username === currentUser.username);
+
+                    users[userIndex].profilePicture = e.target.result;
+                    localStorage.setItem('users', JSON.stringify(users));
+                    localStorage.setItem('currentUser', JSON.stringify(users[userIndex]));
+                    document.getElementById('profilePicture').src = e.target.result;
+                    showSuccessMessage('Profile picture updated successfully!');
+                };
+                reader.readAsDataURL(file);
+            };
+            fileInput.click();
+        }
+
+        // Change Username
+        function changeUsername() {
+            const newUsername = prompt('Enter new username:');
+            if (newUsername) {
+                const users = JSON.parse(localStorage.getItem('users'));
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                const userIndex = users.findIndex(user => user.username === currentUser.username);
+
+                users[userIndex].username = newUsername;
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('currentUser', JSON.stringify(users[userIndex]));
+                showSuccessMessage('Username updated successfully!');
+            }
+        }
+
+        // Change Password
+        function changePassword() {
+            const newPassword = prompt('Enter new password:');
+            if (newPassword) {
+                const users = JSON.parse(localStorage.getItem('users'));
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                const userIndex = users.findIndex(user => user.username === currentUser.username);
+
+                users[userIndex].password = newPassword;
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('currentUser', JSON.stringify(users[userIndex]));
+                showSuccessMessage('Password updated successfully!');
+            }
+        }
+
+        // Check if user is already logged in
+        window.onload = function () {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                showHomePage();
+            }
+        };
+    </script>
 </body>
 
 </html>
