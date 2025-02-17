@@ -331,165 +331,6 @@
 
 <body>
     <script>
-         // Toggle between Register and Login forms
-            function toggleForms() {
-                const registerForm = document.getElementById('registerForm');
-                const loginForm = document.getElementById('loginForm');
-                registerForm.classList.toggle('hidden');
-                loginForm.classList.toggle('hidden');
-            }
-
-            // Show success message
-            function showSuccessMessage(message) {
-                const successMessage = document.createElement('div');
-                successMessage.className = 'success-message';
-                successMessage.textContent = message;
-                document.body.appendChild(successMessage);
-                setTimeout(() => {
-                    successMessage.remove();
-                }, 3000);
-            }
-
-            // Register Function
-            function register() {
-                const username = document.getElementById('registerUsername').value;
-                const email = document.getElementById('registerEmail').value;
-                const password = document.getElementById('registerPassword').value;
-
-                if (username && email && password) {
-                    const users = JSON.parse(localStorage.getItem('users')) || [];
-                    const userExists = users.some(user => user.username === username || user.email === email);
-
-                    if (userExists) {
-                        showSuccessMessage('Username or email already exists.');
-                        return;
-                    }
-
-                    const newUser = { username, email, password, profilePicture: 'default-profile.png' };
-                    users.push(newUser);
-                    localStorage.setItem('users', JSON.stringify(users));
-                    localStorage.setItem('currentUser', JSON.stringify(newUser));
-                    showSuccessMessage('Registration successful!');
-                    showHomePage();
-                } else {
-                    showSuccessMessage('Please fill in all fields.');
-                }
-            }
-
-            // Login Function
-            function login() {
-                const username = document.getElementById('loginUsername').value;
-                const password = document.getElementById('loginPassword').value;
-
-                const users = JSON.parse(localStorage.getItem('users')) || [];
-                const user = users.find(user => user.username === username && user.password === password);
-
-                if (user) {
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                    showSuccessMessage('Login successful!');
-                    showHomePage();
-                } else {
-                    showSuccessMessage('Invalid username or password.');
-                }
-            }
-
-            // Show Home Page
-            function showHomePage() {
-                const user = JSON.parse(localStorage.getItem('currentUser'));
-                if (!user) return;
-
-                document.getElementById('mainContent').classList.remove('hidden');
-                document.getElementById('registerForm').classList.add('hidden');
-                document.getElementById('loginForm').classList.add('hidden');
-                document.getElementById('profileSection').classList.remove('hidden');
-                document.getElementById('aboutPage').classList.add('hidden');
-                document.getElementById('contactPage').classList.add('hidden');
-
-                document.getElementById('profilePicture').src = user.profilePicture || 'default-profile.png';
-            }
-
-            // Profile Options
-            document.getElementById('profilePicture').addEventListener('click', () => {
-                const options = document.getElementById('profileOptions');
-                options.style.display = options.style.display === 'block' ? 'none' : 'block';
-            });
-
-            // Change Profile Picture
-            function changeProfilePicture() {
-                const fileInput = document.createElement('input');
-                fileInput.type = 'file';
-                fileInput.accept = 'image/*';
-                fileInput.onchange = (e) => {
-                    const file = e.target.files[0];
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        const users = JSON.parse(localStorage.getItem('users'));
-                        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                        const userIndex = users.findIndex(user => user.username === currentUser.username);
-
-                        users[userIndex].profilePicture = e.target.result;
-                        localStorage.setItem('users', JSON.stringify(users));
-                        localStorage.setItem('currentUser', JSON.stringify(users[userIndex]));
-                        document.getElementById('profilePicture').src = e.target.result;
-                        showSuccessMessage('Profile picture updated successfully!');
-                    };
-                    reader.readAsDataURL(file);
-                };
-                fileInput.click();
-            }
-
-            // Change Username
-            function changeUsername() {
-                const newUsername = prompt('Enter new username:');
-                if (newUsername) {
-                    const users = JSON.parse(localStorage.getItem('users'));
-                    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                    const userIndex = users.findIndex(user => user.username === currentUser.username);
-
-                    users[userIndex].username = newUsername;
-                    localStorage.setItem('users', JSON.stringify(users));
-                    localStorage.setItem('currentUser', JSON.stringify(users[userIndex]));
-                    showSuccessMessage('Username updated successfully!');
-                }
-            }
-
-            // Change Password
-            function changePassword() {
-                const newPassword = prompt('Enter new password:');
-                if (newPassword) {
-                    const users = JSON.parse(localStorage.getItem('users'));
-                    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                    const userIndex = users.findIndex(user => user.username === currentUser.username);
-
-                    users[userIndex].password = newPassword;
-                    localStorage.setItem('users', JSON.stringify(users));
-                    localStorage.setItem('currentUser', JSON.stringify(users[userIndex]));
-                    showSuccessMessage('Password updated successfully!');
-                }
-            }
-
-            // Handle Contact Form Submission
-            document.getElementById('contactForm').addEventListener('submit', function (e) {
-                e.preventDefault();
-                const name = document.getElementById('contactName').value;
-                const email = document.getElementById('contactEmail').value;
-                const message = document.getElementById('contactMessage').value;
-
-                if (name && email && message) {
-                    showSuccessMessage('Your message has been sent!');
-                    document.getElementById('contactForm').reset();
-                } else {
-                    showSuccessMessage('Please fill in all fields.');
-                }
-            });
-
-            // Check if user is already logged in
-            window.onload = function () {
-                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                if (currentUser) {
-                    showHomePage();
-                }
-            };
         document.addEventListener("DOMContentLoaded", function () {
             console.log("DOM fully loaded and parsed");
             const loadingScreen = document.getElementById("loading-screen");
@@ -535,8 +376,8 @@
         #loading-bar {
             width: 0%;
             height: 6px;
-            background: linear-gradient(90deg, #00ffcc, #007bff, #00d9ff);
-            box-shadow: 0 0 10px #00ff40, 0 0 20px #6f00ff;
+            background: linear-gradient(90deg, #00ffcc, #007bff, #ff00f2);
+            box-shadow: 0 0 10px #00ffcc, 0 0 20px #007bff;
             transition: width 3.5s ease-in-out;
         }
 
@@ -547,7 +388,7 @@
             left: 0;
             width: 15px;
             height: 6px;
-            background: rgb(214, 142, 142);
+            background: white;
             box-shadow: 0 0 10px #00ffcc, 0 0 20px #007bff, 0 0 30px #ff00f2;
             opacity: 0.8;
             animation: glow-move 3.5s ease-in-out;
@@ -589,10 +430,10 @@
         <h2 id="loading-text">Loading...</h2>
     </div>
 
-    <a href="index1.html">
+     <a href="index1.html">
         <img src="logo.png" alt="WEBTANK Logo" class="logo" width="150">
     </a>
-    
+
     <!-- Profile Section -->
     <div class="profile hidden" id="profileSection">
         <img id="profilePicture" src="default-profile.png" alt="Profile Picture">
@@ -602,7 +443,7 @@
             <button onclick="changePassword()">Change Password</button>
         </div>
     </div>
-    
+
     <!-- Register Form -->
     <div class="auth-container" id="registerForm">
         <h2>Register</h2>
@@ -612,7 +453,7 @@
         <button onclick="register()">Register</button>
         <p>Already have an account? <a href="#" onclick="toggleForms()">Login here</a></p>
     </div>
-    
+
     <!-- Login Form -->
     <div class="auth-container hidden" id="loginForm">
         <h2>Login</h2>
@@ -621,7 +462,7 @@
         <button onclick="login()">Login</button>
         <p>Don't have an account? <a href="#" onclick="toggleForms()">Register here</a></p>
     </div>
-    
+
     <!-- Main Content -->
     <div class="container hidden" id="mainContent">
         <h1>WEBTANK</h1>
@@ -639,7 +480,7 @@
             <li><a href="contact.html">Contact Us</a></li>
         </ul>
     </div>
-    
+
     <div class="section" data-search="software">
         <h2>Software </h2>
         <p>Explore a variety of software applications.</p>
@@ -650,7 +491,7 @@
             <li><a href="software/dev/index.html">Development Tools</a></li>
         </ul>
     </div>
-    
+
     <div class="section" data-search="games">
         <h2>Games </h2>
         <p>Find the best games for different platforms.</p>
@@ -660,7 +501,7 @@
             <li><a href="games/console/index.html">Console Games</a></li>
         </ul>
     </div>
-    
+
     <div class="section" data-search="movies music">
         <h2>Movies </h2>
         <p>Enjoy the latest movies and music collections.</p>
@@ -670,7 +511,7 @@
             <li><a href="movi/stb/index.html">Soundtracks</a></li>
         </ul>
     </div>
-    
+
     <div class="section" data-search="ebooks books">
         <h2>E-books </h2>
         <p>Find a wide range of digital books.</p>
@@ -680,7 +521,7 @@
             <li><a href="ebook/edu/index.html">Educational</a></li>
         </ul>
     </div>
-    
+
     <div class="section" data-search="news updates">
         <h2>News </h2>
         <p>Stay updated with the latest news.</p>
@@ -693,7 +534,7 @@
     <footer>
         &copy; 2025 WEBTANK. All rights reserved. | Created by Mubashir Ali |
     </footer>
-    
+
     <!-- About Us Page -->
     <div class="container hidden" id="aboutPage">
         <h1>About Us</h1>
@@ -704,7 +545,7 @@
         <p>Thank you for choosing WEBTANK. We hope you enjoy your time here!</p>
         <a href="index1.html" class="download-btn">Back to Home</a>
     </div>
-    
+
     <!-- Contact Us Page -->
     <div class="container hidden" id="contactPage">
         <h1>Contact Us</h1>
