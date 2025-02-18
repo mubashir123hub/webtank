@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to WEBTANK</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: radial-gradient(circle, #111, #000);
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 10px;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .typing-text,
+        .description {
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #00ffcc, #007bff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            white-space: nowrap;
+            overflow: hidden;
+            display: inline-block;
+            border-right: 3px solid white;
+        }
+
+        .typing-text {
+            font-size: 6vw;
+            /* Smaller font size for better fit */
+            animation: typing 3s steps(20, end) forwards, glow 2s infinite alternate;
+        }
+
+        .description {
+            font-size: 3vw;
+            /* Smaller font size for better fit */
+            opacity: 0;
+            width: 100%;
+            white-space: normal;
+            word-wrap: break-word;
+            max-width: 90%;
+            display: inline-block;
+            animation: none;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes glow {
+            0% {
+                text-shadow: 0 0 10px #00ffcc, 0 0 20px #007bff, 0 0 30px #ff00ff;
+            }
+
+            100% {
+                text-shadow: 0 0 20px #007bff, 0 0 40px #ff00ff, 0 0 50px #00ffcc;
+            }
+        }
+
+        @keyframes typingDescription {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 100%;
+            }
+        }
+
+        /* Media query for mobile devices */
+        @media (max-width: 768px) {
+            .typing-text {
+                font-size: 5vw;
+                /* Slightly larger text on mobile */
+            }
+
+            .description {
+                font-size: 3vw;
+                /* Adjusted description font for mobile */
+                max-width: 100%;
+            }
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let typingText = document.querySelector(".typing-text");
+            let description = document.querySelector(".description");
+
+            // Typing animation for the main text
+            typingText.style.animation = "typing 3s steps(20, end) forwards, glow 2s infinite alternate";
+
+            setTimeout(() => {
+                // Deleting animation for the main text
+                typingText.style.animation = "deleting 2s steps(20, end) forwards";
+            }, 4000);
+
+            setTimeout(() => {
+                // Show description with typing effect
+                description.style.opacity = "1";
+                description.style.animation = "typingDescription 3s steps(30, end) forwards, glow 2s infinite alternate";
+            }, 6000);
+
+            setTimeout(() => {
+                window.location.href = 'index1.html';
+            }, 15000); // Redirect after 15 seconds
+        });
+    </script>
+</head>
+
+<body>
+    <div class="typing-text">Welcome to WEBTANK</div>
+    <div class="description">A versatile platform offering a wide range of resources for everyone. Whether you're a
+        student, professional, or just
+        someone looking for useful content, Webtank has it all. From downloadable study materials across all subjects to
+        an
+        easy-to-navigate web theme, we provide everything you need for quick learning, efficient downloads, and a
+        seamless
+        browsing experience. </div>
+</body>
+
+</html>
