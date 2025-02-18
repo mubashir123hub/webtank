@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to WEBTANK</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto+Mono:wght@400;700&display=swap');
 
         body {
             display: flex;
@@ -16,7 +16,7 @@
             height: 100vh;
             background: radial-gradient(circle, #111, #000);
             color: white;
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto Mono', monospace;
             text-align: center;
             padding: 10px;
             margin: 0;
@@ -38,13 +38,11 @@
 
         .typing-text {
             font-size: 6vw;
-            /* Smaller font size for better fit */
             animation: typing 3s steps(20, end) forwards, glow 2s infinite alternate;
         }
 
         .description {
             font-size: 3vw;
-            /* Smaller font size for better fit */
             opacity: 0;
             width: 100%;
             white-space: normal;
@@ -88,12 +86,10 @@
         @media (max-width: 768px) {
             .typing-text {
                 font-size: 5vw;
-                /* Slightly larger text on mobile */
             }
 
             .description {
                 font-size: 3vw;
-                /* Adjusted description font for mobile */
                 max-width: 100%;
             }
         }
@@ -108,19 +104,31 @@
 
             setTimeout(() => {
                 // Deleting animation for the main text
-                typingText.style.animation = "deleting 2s steps(20, end) forwards";
+                typingText.style.animation = "none";
+                typingText.style.borderRight = "none";
             }, 4000);
 
             setTimeout(() => {
-                // Show description with typing effect
+                // Show description with human-like typing effect
                 description.style.opacity = "1";
-                description.style.animation = "typingDescription 3s steps(30, end) forwards, glow 2s infinite alternate";
+                typeDescription(description, description.textContent, 0);
             }, 6000);
 
             setTimeout(() => {
-                window.location.href = 'index1.html';
-            }, 15000); // Redirect after 15 seconds
+                window.location.href = 'lol.html';
+            }, 50000); // Redirect after 15 seconds
         });
+
+        function typeDescription(element, text, index) {
+            if (index < text.length) {
+                element.textContent = text.substring(0, index + 1);
+                // Random delay to simulate human typing
+                let delay = Math.random() * 100 + 50; // Adjust delay for realism
+                setTimeout(() => typeDescription(element, text, index + 1), delay);
+            } else {
+                element.style.borderRight = "none"; // Remove cursor after typing
+            }
+        }
     </script>
 </head>
 
@@ -132,7 +140,7 @@
         an
         easy-to-navigate web theme, we provide everything you need for quick learning, efficient downloads, and a
         seamless
-        browsing experience. </div>
+        browsing experience.</div>
 </body>
 
 </html>
