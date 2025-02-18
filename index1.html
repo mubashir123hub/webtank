@@ -16,7 +16,7 @@
         }
 
         ::-webkit-scrollbar {
-            width: 15px;
+            width: 10px;
         }
 
         ::-webkit-scrollbar-track {
@@ -35,7 +35,7 @@
         }
 
         html {
-            scroll-behavior: inherit;
+            scroll-behavior: smooth;
         }
 
         body {
@@ -48,8 +48,8 @@
         }
 
         .container {
-            max-width: 1200px;
-            margin: 50px auto;
+            max-width: 90%;
+            margin: 20px auto;
             padding: 20px;
             background: rgba(255, 255, 255, 0.1);
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
@@ -60,7 +60,7 @@
 
         h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 3rem;
+            font-size: 2.5rem;
             margin-bottom: 20px;
             background: linear-gradient(90deg, #00ffcc, #007bff);
             -webkit-background-clip: text;
@@ -81,8 +81,8 @@
         input[type="text"],
         input[type="password"],
         input[type="email"] {
-            width: 70%;
-            padding: 15px;
+            width: 90%;
+            padding: 12px;
             margin: 10px 0;
             border: 2px solid #00ffcc;
             border-radius: 30px;
@@ -100,7 +100,7 @@
         }
 
         button {
-            padding: 15px 30px;
+            padding: 12px 24px;
             cursor: pointer;
             background: linear-gradient(90deg, #00ffcc, #007bff);
             color: white;
@@ -115,9 +115,10 @@
             transform: scale(1.05);
             box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
         }
+
         .section {
-            max-width: 1200px;
-            margin: 30px auto;
+            max-width: 90%;
+            margin: 20px auto;
             padding: 20px;
             background: rgba(255, 255, 255, 0.1);
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
@@ -127,15 +128,16 @@
 
         .section h2 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
+            font-size: 1.8rem;
             margin-bottom: 15px;
             color: #00ffcc;
         }
 
         .section p {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #ccc;
         }
+
         ul {
             list-style: none;
             padding: 0;
@@ -146,14 +148,14 @@
         }
 
         li {
-            margin: 10px 20px;
+            margin: 10px;
         }
 
         a {
             text-decoration: none;
             color: #00ffcc;
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1rem;
             transition: color 0.3s, transform 0.3s;
         }
 
@@ -162,31 +164,9 @@
             transform: translateY(-5px);
         }
 
-        .section {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-        }
-
-        .section h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2rem;
-            margin-bottom: 15px;
-            color: #00ffcc;
-        }
-
-        .section p {
-            font-size: 1.1rem;
-            color: #ccc;
-        }
-
         footer {
-            margin-top: 50px;
-            padding: 20px;
+            margin-top: 30px;
+            padding: 15px;
             background: rgba(0, 0, 0, 0.5);
             text-align: center;
             font-size: 14px;
@@ -204,6 +184,7 @@
         }
 
         .logo {
+            width: 100px;
             animation: float 3s ease-in-out infinite;
         }
 
@@ -226,22 +207,22 @@
         /* Profile Section */
         .profile {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 10px;
+            right: 10px;
             cursor: pointer;
             z-index: 1000;
         }
 
         .profile img {
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             border: 2px solid #00ffcc;
         }
 
         .profile-options {
             position: absolute;
-            top: 60px;
+            top: 50px;
             right: 0;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -300,24 +281,62 @@
                 font-size: 2rem;
             }
 
-            input[type="text"],
-            input[type="password"],
-            input[type="email"] {
-                width: 90%;
+            .container {
+                padding: 15px;
             }
 
-            .profile {
-                top: 10px;
-                right: 10px;
+            .section {
+                padding: 15px;
+            }
+
+            .section h2 {
+                font-size: 1.5rem;
+            }
+
+            .section p {
+                font-size: 0.9rem;
+            }
+
+            .logo {
+                width: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            @media (max-width: 768px) {
+    .container, .section {
+        backdrop-filter: none; /* Remove blur */
+        background: rgba(255, 255, 255, 0.1); /* Solid fallback */
+    }
+}
+            button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .section h2 {
+                font-size: 1.2rem;
+            }
+
+            .section p {
+                font-size: 0.8rem;
+            }
+
+            .logo {
+                width: 60px;
             }
 
             .profile img {
-                width: 40px;
-                height: 40px;
+                width: 25px;
+                height: 25px;
             }
 
             .profile-options {
-                top: 50px;
+                top: 35px;
             }
         }
     </style>
@@ -365,7 +384,7 @@
             justify-content: center;
             z-index: 9999;
         }
-    
+
         /* Loading Bar */
         #loading-bar {
             width: 0%;
@@ -374,7 +393,7 @@
             box-shadow: 0 0 10px #00ffcc, 0 0 20px #007bff;
             transition: width 3.5s ease-in-out;
         }
-    
+
         /* Glowing Effect */
         #loading-glow {
             position: absolute;
@@ -387,32 +406,32 @@
             opacity: 0.8;
             animation: glow-move 3.5s ease-in-out;
         }
-    
+
         /* Loading Text */
         #loading-text {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             color: #00ffcc;
             margin-top: 15px;
             animation: blink 1s infinite alternate;
         }
-    
+
         /* Keyframes */
         @keyframes glow-move {
             0% {
                 left: 0%;
             }
-    
+
             100% {
                 left: 100%;
             }
         }
-    
+
         @keyframes blink {
             0% {
                 opacity: 1;
             }
-    
+
             100% {
                 opacity: 0.5;
             }
@@ -425,7 +444,7 @@
     </div>
 
     <a href="index1.html">
-        <img src="logo.png" alt="WEBTANK Logo" class="logo" width="150">
+        <img src="logo.png" alt="WEBTANK Logo" class="logo">
     </a>
 
     <!-- Profile Section -->
@@ -439,7 +458,7 @@
     <!-- Main Content -->
     <div class="container hidden" id="mainContent">
         <h1>WEBTANK</h1>
-        <h2> <a href="https://discord.gg/rJzS7aGMnQ" target="_blank">Join Our DiscordServer</a></h2>
+        <h2> <a href="https://discord.gg/rJzS7aGMnQ" target="_blank">Join Our Discord Server</a></h2>
         <h2> <a style="cursor: unset;" href="#">m12175369@gmail.com</a></h2>
         <input type="text" id="searchInput" placeholder="Search for software, games, etc...">
         <button onclick="performSearch()">Search</button>
@@ -454,7 +473,7 @@
             <li><a href="software/dev/index.html">Development Tools</a></li>
         </ul>
     </div>
-    
+
     <div class="section" data-search="games">
         <h2>Games </h2>
         <p>Find the best games for different platforms.</p>
@@ -464,7 +483,7 @@
             <li><a href="games/console/index.html">Console Games</a></li>
         </ul>
     </div>
-    
+
     <div class="section" data-search="movies music">
         <h2>Movies </h2>
         <p>Enjoy the latest movies and music collections.</p>
@@ -474,7 +493,7 @@
             <li><a href="movi/stb/index.html">Soundtracks</a></li>
         </ul>
     </div>
-    
+
     <div class="section" data-search="ebooks books">
         <h2>E-books </h2>
         <p>Find a wide range of digital books.</p>
@@ -484,7 +503,7 @@
             <li><a href="ebook/edu/index.html">Educational</a></li>
         </ul>
     </div>
-    
+
     <div class="section" data-search="news updates">
         <h2>News </h2>
         <p>Stay updated with the latest news.</p>
@@ -495,22 +514,27 @@
         </ul>
     </div>
     <div class="section" data-search="aboutPage,">
-       <h1>About US</h1>
-     <h2>
-        About Me
-        Hi, I’m a passionate web developer and a student of class 9, bringing creativity and innovation to the digital world. At
-        just 14 years old, I’ve already developed my first website in just 5 days, showcasing my skills and dedication to web
-        development. I love turning ideas into reality through clean, efficient, and user-friendly designs. My journey in coding
-        is just beginning, and I’m constantly learning and improving to create even better digital experiences.
-        
-        If you want to create a website, feel free to contact us at <a style="font-size: 2rem; color: #7006c7f5; cursor: unset;" href="#">m12175369@gmail.com</a> OR join our <a style="font-size: 2rem; color: #7006c7f5;" href="https://discord.gg/rJzS7aGMnQ" target="_blank">Discord server</a> to share
-        ideas and give feedback!</h2>
-     </h2>
+        <h1>About US</h1>
+        <h2>
+            About Me
+            Hi, I’m a passionate web developer and a student of class 9, bringing creativity and innovation to the
+            digital world. At
+            just 14 years old, I’ve already developed my first website in just 5 days, showcasing my skills and
+            dedication to web
+            development. I love turning ideas into reality through clean, efficient, and user-friendly designs. My
+            journey in coding
+            is just beginning, and I’m constantly learning and improving to create even better digital experiences.
+
+            If you want to create a website, feel free to contact us at <a
+                style="font-size: 1.5rem; color: #7006c7f5; cursor: unset;" href="#">m12175369@gmail.com</a> OR join our
+            <a style="font-size: 1.5rem; color: #7006c7f5;" href="https://discord.gg/rJzS7aGMnQ" target="_blank">Discord
+                server</a> to share
+            ideas and give feedback!
+        </h2>
     </div>
 
     <footer>
-        &copy; 2025 WEBTANK. All rights reserved. 
-        
+        &copy; 2025 WEBTANK. All rights reserved.
     </footer>
 
     <script>
